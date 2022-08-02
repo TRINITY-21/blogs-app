@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags%}
+
+{% block body_class %}{{page.title}}{% endblock %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CalTech Initiative for Students</title>
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<style>
+  .responsive-object {
+    position: relative;
+  }
+
+  .responsive-object iframe,
+  .responsive-object object,
+  .responsive-object embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+</html>
+
+<body class="page-type-story-page">
+  <div class="icon-sprite" role="presentation">
+    <?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
+      <symbol viewBox="0 0 90 90" id="career" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M58.7 40.3c0 .3-.1.6-.3.8-.2.2-.5.3-.8.3h-4.3c-.3 0-.6-.1-.8-.3-.2-.2-.3-.5-.3-.8 0-.3.1-.6.3-.8.2-.2.5-.3.8-.3h1.1v-6.5h-1.1c-.3 0-.6-.1-.8-.3-.2-.2-.3-.5-.3-.8s.1-.6.3-.8c.2-.2.5-.3.8-.3h2.2c.3 0 .6.1.8.3.2.2.3.4.3.7v7.7h1.1c.3 0 .6.1.8.3.1.3.2.5.2.8zm-4.8-13c0-.9.7-1.6 1.6-1.6s1.6.7 1.6 1.6c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6zm15.9-5.5H39.9v16.4c1.9 1.7 3 4.3 3 7.2v.6h6.4v6l6.4-6h14.1V21.8zM39.6 50.7c1.2-1.4 1.9-3.3 1.9-5.3 0-4.2-3-7.7-6.7-7.7s-6.7 3.5-6.7 7.7c0 2.1.7 4 1.9 5.3-5.5 2.3-9.2 7.6-9.2 11.3 0 1.2.5 3 3 4.3 2.5 1.3 6 1.8 11 1.8s8.7-.6 11-1.8c2.5-1.3 3-3.1 3-4.3 0-3.8-3.6-9-9.2-11.3z" />
+      </symbol>
+      <symbol id="close-x" viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .bst0 {
+            fill-rule: evenodd;
+            clip-rule: evenodd
+          }
+        </style>
+        <path class="bst0"
+          d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14.2c-3.4 0-6.2-2.8-6.2-6.2 0-3.4 2.8-6.2 6.2-6.2s6.2 2.8 6.2 6.2c0 3.4-2.8 6.2-6.2 6.2z" />
+        <path class="bst0"
+          d="M11 5c-.3-.3-.9-.3-1.3 0L8 6.7 6.3 5c-.4-.3-1-.3-1.3 0-.3.3-.3.9 0 1.3L6.7 8 5 9.7c-.3.3-.3.9 0 1.3.3.3.9.3 1.3 0L8 9.3 9.7 11c.3.3.9.3 1.3 0 .3-.3.3-.9 0-1.3L9.3 8 11 6.3c.3-.4.3-1 0-1.3z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="cocurricular" xmlns="http://www.w3.org/2000/svg">
+        <path d="M45 18.7l8 16.2 17.9 2.6-13 12.7L61 68l-16-8.4L29 68l3.1-17.8-13-12.6L37 34.9l8-16.2z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="fellowships" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M63.5 25.5h5V25c0-.7-.3-1.3-.7-1.8-.5-.5-1.1-.7-1.8-.7s-1.3.3-1.8.7c-.4.5-.7 1.1-.7 1.8v.5zm-42 39v.5c0 .7.3 1.3.7 1.8.5.5 1.1.7 1.8.7h29.1c-.4-.8-.6-1.6-.6-2.5v-.5h-31z" />
+        <path
+          d="M32 21c-1.6 0-3.1.6-4.2 1.8-1.1 1.1-1.8 2.7-1.8 4.2v36h28v2c0 1.1.4 2.1 1.2 2.8.8.8 1.8 1.2 2.8 1.2 1.1 0 2.1-.4 2.8-1.2C61.6 67 62 66 62 65V25c0-1.1.4-2.1 1.2-2.8C64 21.4 65 21 66 21H32z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="health" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M70.7 33.6c-.7-1.7-1.8-3.3-3.1-4.7-1.3-1.3-2.9-2.4-4.7-3.1-1.7-.7-3.6-1.1-5.5-1.1-4.5 0-9.6 2.1-12.3 5.3-2.7-3.2-7.8-5.3-12.4-5.3-3.8 0-7.5 1.5-10.2 4.2-2.7 2.7-4.2 6.4-4.2 10.2 0 13.5 22.3 27.5 26.2 29.9.2.1.4.2.6.2.2 0 .4-.1.6-.2 3.9-2.3 26.2-16.3 26.2-29.9-.1-1.8-.5-3.7-1.2-5.5zM53.5 49h-5.2v5.2h-6.6V49h-5.2v-6.6h5.2v-5.2h6.6v5.2h5.2V49z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="scholarship" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M45.6 41.7c5.1-.1 10.1.6 15 2.2V36c-3.6-1.5-9.1-2.4-15-2.4s-11.4.9-14.9 2.4v7.9c4.8-1.6 9.9-2.3 14.9-2.2z" />
+        <path
+          d="M75.8 30.1L45.7 21l-30.1 9.1L29.2 35c10.6-4 22.3-4 33 0l5.6-2v8.7h2v-9.4l6-2.2zM46 69.5c6.7 0 12.2-5.5 12.2-12.2 0-6.7-5.5-12.2-12.2-12.2-6.7 0-12.2 5.5-12.2 12.2.1 6.7 5.5 12.2 12.2 12.2z" />
+      </symbol>
+    </svg>
+  </div>
+  <header class="site-header"><a class="site-header__branding" href="#">Initiative for Students | Caltech</a>
+    <div class="site-header__menu">
+      <button class="site-header__menu-toggle js-nav-toggle" aria-label="Toggle Menu Visibility"><span></span></button>
+      <nav class="site-header__nav" role="navigation" aria-label="Primary Navigation">
+        <ul class="site-header__nav-list">
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/story-listings">Stories of
+              Impact</a>
+          </li>
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/faq">About the
+              Campaign</a>
+          </li>
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="tel:646-395-4863">Call
+              (646) 395-4863</a></li>
+        </ul><a class="site-header__nav-list-button" href="#">Make a Gift</a>
+      </nav>
+    </div>
+  </header>
+  <main id="maincontent">
+    <section class="component link-banner">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <div class="link-banner__content"><a class="link-banner__link" href="/story-listings">&lt; Back to Stories of
+            Impact</a></div>
+      </div>
+    </section>
+    <section class="component story-hero">
+      <div class="story-hero__wrap">
+        <div class="component__background" role="presentation"></div>
+        <div class="component__content">
+          <p class="story-hero__eyebrow">{{self.primary_tag}}</p>
+          <h1 class="story-hero__title">{{self.custom_title}}</h1>
+          <p class="story-hero__author">{{self.author.firstname}} {{self.author.lastname}},
+            {{self.co_author.co_firstname}}
+            {{self.co_author.co_lastname}}</p>
+          <p class="story-hero__author">{{self.author.job_title}}, {{self.co_author.co_job_title}}</p>
+        </div>
+      </div>
+      <!-- add image -->
+      {% image self.featured_image original as banner %}
+
+      <div class="story-hero__wrap">
+        <div class="component__background component__background--image" role="presentation"></div>
+        <div class="component__content component__content--image"><img class="story-hero__image" src="{{ banner.url }}"
+            alt="Smiling students"></div>
+      </div>
+    </section>
+
+    <!-- Edit richtext fields -->
+    {% for block in page.body %}
+    <section class="component rte">
+      {% include_block block %}
+      <a class="button" href="/story-listings">View All Stories</a><a class="button" href="#">Make A Gift Now</a>
+    </section>
+
+    {%endfor%}
+    <section class="component form-cta">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
+        <form class="form" action="" id="signup-form">
+          <div class="form__input-wrapper form__input--firstname">
+            <input class="form__input" type="text" name="firstname" placeholder="First Name" required>
+            <label class="form__label" for="firstname">First Name</label>
+          </div>
+          <div class="form__input-wrapper form__input--lastname">
+            <input class="form__input" type="text" name="lastname" placeholder="Last Name" required>
+            <label class="form__label" for="lastname">Last Name</label>
+          </div>
+          <div class="form__input-wrapper form__input--email">
+            <input class="form__input" type="email" name="email" placeholder="Email" required>
+            <label class="form__label" for="email">Email</label>
+          </div>
+          <div class="form__input-wrapper form__input--message">
+            <textarea class="form__input form__input--textarea" name="message"
+              placeholder="What the Student Experience means to me*"></textarea>
+            <div class="form__notice">*optional</div>
+          </div>
+          <button class="form__input--submit" type="submit" form="signup-form">Submit</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+<script src="{% static 'js/vendors~mains.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/mains.js' %}" type="text/javascript"></script>
+
+{%endblock%}

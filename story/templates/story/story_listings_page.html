@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load wagtailcore_tags wagtailimages_tags%}
+
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CalTech Initiative for Students</title>
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+</html>
+
+<body class="page-type-listing-page">
+  <div class="icon-sprite" role="presentation">
+    <?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
+      <symbol viewBox="0 0 90 90" id="career" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M58.7 40.3c0 .3-.1.6-.3.8-.2.2-.5.3-.8.3h-4.3c-.3 0-.6-.1-.8-.3-.2-.2-.3-.5-.3-.8 0-.3.1-.6.3-.8.2-.2.5-.3.8-.3h1.1v-6.5h-1.1c-.3 0-.6-.1-.8-.3-.2-.2-.3-.5-.3-.8s.1-.6.3-.8c.2-.2.5-.3.8-.3h2.2c.3 0 .6.1.8.3.2.2.3.4.3.7v7.7h1.1c.3 0 .6.1.8.3.1.3.2.5.2.8zm-4.8-13c0-.9.7-1.6 1.6-1.6s1.6.7 1.6 1.6c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6zm15.9-5.5H39.9v16.4c1.9 1.7 3 4.3 3 7.2v.6h6.4v6l6.4-6h14.1V21.8zM39.6 50.7c1.2-1.4 1.9-3.3 1.9-5.3 0-4.2-3-7.7-6.7-7.7s-6.7 3.5-6.7 7.7c0 2.1.7 4 1.9 5.3-5.5 2.3-9.2 7.6-9.2 11.3 0 1.2.5 3 3 4.3 2.5 1.3 6 1.8 11 1.8s8.7-.6 11-1.8c2.5-1.3 3-3.1 3-4.3 0-3.8-3.6-9-9.2-11.3z" />
+      </symbol>
+      <symbol id="close-x" viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .bst0 {
+            fill-rule: evenodd;
+            clip-rule: evenodd
+          }
+        </style>
+        <path class="bst0"
+          d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14.2c-3.4 0-6.2-2.8-6.2-6.2 0-3.4 2.8-6.2 6.2-6.2s6.2 2.8 6.2 6.2c0 3.4-2.8 6.2-6.2 6.2z" />
+        <path class="bst0"
+          d="M11 5c-.3-.3-.9-.3-1.3 0L8 6.7 6.3 5c-.4-.3-1-.3-1.3 0-.3.3-.3.9 0 1.3L6.7 8 5 9.7c-.3.3-.3.9 0 1.3.3.3.9.3 1.3 0L8 9.3 9.7 11c.3.3.9.3 1.3 0 .3-.3.3-.9 0-1.3L9.3 8 11 6.3c.3-.4.3-1 0-1.3z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="cocurricular" xmlns="http://www.w3.org/2000/svg">
+        <path d="M45 18.7l8 16.2 17.9 2.6-13 12.7L61 68l-16-8.4L29 68l3.1-17.8-13-12.6L37 34.9l8-16.2z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="fellowships" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M63.5 25.5h5V25c0-.7-.3-1.3-.7-1.8-.5-.5-1.1-.7-1.8-.7s-1.3.3-1.8.7c-.4.5-.7 1.1-.7 1.8v.5zm-42 39v.5c0 .7.3 1.3.7 1.8.5.5 1.1.7 1.8.7h29.1c-.4-.8-.6-1.6-.6-2.5v-.5h-31z" />
+        <path
+          d="M32 21c-1.6 0-3.1.6-4.2 1.8-1.1 1.1-1.8 2.7-1.8 4.2v36h28v2c0 1.1.4 2.1 1.2 2.8.8.8 1.8 1.2 2.8 1.2 1.1 0 2.1-.4 2.8-1.2C61.6 67 62 66 62 65V25c0-1.1.4-2.1 1.2-2.8C64 21.4 65 21 66 21H32z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="health" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M70.7 33.6c-.7-1.7-1.8-3.3-3.1-4.7-1.3-1.3-2.9-2.4-4.7-3.1-1.7-.7-3.6-1.1-5.5-1.1-4.5 0-9.6 2.1-12.3 5.3-2.7-3.2-7.8-5.3-12.4-5.3-3.8 0-7.5 1.5-10.2 4.2-2.7 2.7-4.2 6.4-4.2 10.2 0 13.5 22.3 27.5 26.2 29.9.2.1.4.2.6.2.2 0 .4-.1.6-.2 3.9-2.3 26.2-16.3 26.2-29.9-.1-1.8-.5-3.7-1.2-5.5zM53.5 49h-5.2v5.2h-6.6V49h-5.2v-6.6h5.2v-5.2h6.6v5.2h5.2V49z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="scholarship" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M45.6 41.7c5.1-.1 10.1.6 15 2.2V36c-3.6-1.5-9.1-2.4-15-2.4s-11.4.9-14.9 2.4v7.9c4.8-1.6 9.9-2.3 14.9-2.2z" />
+        <path
+          d="M75.8 30.1L45.7 21l-30.1 9.1L29.2 35c10.6-4 22.3-4 33 0l5.6-2v8.7h2v-9.4l6-2.2zM46 69.5c6.7 0 12.2-5.5 12.2-12.2 0-6.7-5.5-12.2-12.2-12.2-6.7 0-12.2 5.5-12.2 12.2.1 6.7 5.5 12.2 12.2 12.2z" />
+      </symbol>
+    </svg>
+  </div>
+  <header class="site-header"><a class="site-header__branding" href="/story-listings">Initiative for Students |
+      Caltech</a>
+    <div class="site-header__menu">
+      <button class="site-header__menu-toggle js-nav-toggle" aria-label="Toggle Menu Visibility"><span></span></button>
+      <nav class="site-header__nav" role="navigation" aria-label="Primary Navigation">
+        <ul class="site-header__nav-list">
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/story-listings">Stories of
+              Impact</a>
+          </li>
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/faq">About the
+              Campaign</a>
+          </li>
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="tel:646-395-4863">Call
+              (646) 395-4863</a></li>
+        </ul><a class="site-header__nav-list-button" href="#">Make a Gift</a>
+      </nav>
+    </div>
+  </header>
+  <main id="maincontent">
+    <section class="component title-banner">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <div class="title-banner__content">
+          <h1 class="title-banner__headline">Stories of Impact</h1>
+        </div>
+      </div>
+    </section>
+
+    <!-- add header listings story by current story -->
+    {% for story in self.header_story %}
+    {% image story.featured_image original as banner %}
+
+    <section class="component image-hero">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <div class="image-hero__content">
+          <p class="image-hero__eyebrow">{{story.primary_tag}}</p>
+          <h1 class="image-hero__headline">{{story.custom_title}}</h1>
+          <p class="image-hero__copy">{{story.summary}}</p><a class="image-hero__cta" href="{% pageurl story %}">Learn
+            More</a>
+        </div><img class="image-hero__image" src="{{banner.url}}" alt="Smiling students">
+      </div>
+    </section>
+    {%endfor%}
+    <section class="component filters">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <h1 class="filters__headline">Filter Stories</h1>
+        <div class="filters__filters">
+          <!-- Add Secondary Tags for Filtering -->
+          {% for tags in page.get_tags %}
+          <div class="filters__filter">
+            <label class="filters__label">
+              <input class="filters__checkbox" type="checkbox" name="{{tags.slug}}" value={{tags.slug}}>{{tags.name}}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Check if tags  are availing for filtering and hide/show clear filter -->
+        {% if '?tags=' in request.get_full_path %}
+        <button class="filters__clear" onclick=clearAll()>Clear Filters
+          <svg class="filters__clear-icon" role="presentation">
+            <use xlink:href="#close-x"></use>
+          </svg>
+        </button>
+        {%endif%}
+
+      </div>
+    </section>
+
+    <!-- Add Ajax and jquery cdn for ajax calls -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+      function locations() {
+        //var id=20; get the value of id and save in id(getElementById or jquery)
+        window.location.href = 'www.example.com/page.html?id=' + id;
+      }
+    </script>
+    <!-- Perform checkbox checked operations in js -->
+    <script>
+      $(document).on('click', function (e) {
+        let a = $('input:checkbox:checked').map(function () {
+          return $(this).val()
+        }).get()
+        // alert(a)
+        if (a != '') {
+          window.location = `/story-listings/?tags=${a}` || {}
+
+        }
+        else {
+          window.location = `/story-listings/` || {}
+
+        }
+      })
+    </script>
+
+    <!-- Clear all filters after Filtering -->
+    <script>
+      function clearAll() {
+        $(document).on('click', function (e) {
+          var a = $('input:checkbox:checked').map(function () {
+            return $(this).val()
+          }).removeAttr(a)
+          // alert(a)
+          localStorage.clear()
+          window.location = `/story-listings/` || {}
+        })
+      }
+    </script>
+
+    <!-- save checkbox value to localStorage -->
+    <script>
+      // Avoid scoping issues by encapsulating code inside anonymous function
+      (function () {
+        // variable to store our current state
+        var cbstate;
+
+        // bind to the onload event
+        window.addEventListener('load', function () {
+          // Get the current state from localstorage
+          // State is stored as a JSON string
+          cbstate = JSON.parse(localStorage['CBState'] || '{}');
+
+          // Loop through state array and restore checked
+          // state for matching elements
+          for (var i in cbstate) {
+            var el = document.querySelector('input[name="' + i + '"]');
+            if (el) el.checked = true;
+          }
+
+          // Get all checkboxes that you want to monitor state for
+          var cb = document.getElementsByClassName('filters__checkbox');
+
+          // Loop through results and ...
+          for (var i = 0; i < cb.length; i++) {
+
+            //bind click event handler
+            cb[i].addEventListener('click', function (evt) {
+              // If checkboxe is checked then save to state
+              if (this.checked) {
+                cbstate[this.name] = true;
+              }
+
+              // Else remove from state
+              else if (cbstate[this.name]) {
+                delete cbstate[this.name];
+              }
+
+              // Persist state
+              localStorage.CBState = JSON.stringify(cbstate);
+            });
+          }
+        });
+      })();
+    </script>
+
+
+    <section class="component teaser-list">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <!-- Add Story Teasers -->
+        {% if self.story %}
+        {% for story in self.story %}
+        {% with story=story.specific %}
+        {% image story.featured_image fill-750x420 as banner %}
+        <a class="component teaser" href="{% pageurl story %}">
+          <figure class="teaser__img"><img src="{{banner.url}}" alt="Alt text"></figure>
+          <div class="teaser__content">
+            <p class="teaser__tags">{{story.primary_tag}}</p>
+            <h1 class="teaser__headline">Lorem ipsum dolor sit amet consectetuer adipiscing elit</h1>
+            <p class="teaser__copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Netus ornare maecenas sit
+              diam. Ut magnis aliquet mi augue vestibulum mauris.</p>
+            <div class="teaser__cta">Learn More</div>
+          </div>
+          {%endwith%}
+          {%endfor%}
+          {%endif%}
+        </a>
+
+      </div>
+    </section>
+
+    <section class="component pagination">
+      <button class="pagination__first is-disabled" title="First" disabled>
+        <<< </button>
+
+          <button class="pagination__prev" title="Previous" disabled>
+            << </button>
+              <button class="pagination__page">1</button>
+              <button class="pagination__page is-active">2</button>
+              <button class="pagination__page">3</button>
+              <button class="pagination__page">4</button>
+              <button class="pagination__page">5</button>
+              <button class="pagination__page">6</button>
+              <button class="pagination__page">7</button>
+              <button class="pagination__next" title="Next">></button>
+              <button class="pagination__last" title="Last">>></button>
+    </section>
+    <section class="component form-cta">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
+        <form class="form" action="" id="signup-form">
+          <div class="form__input-wrapper form__input--firstname">
+            <input class="form__input" type="text" name="firstname" placeholder="First Name" required>
+            <label class="form__label" for="firstname">First Name</label>
+          </div>
+          <div class="form__input-wrapper form__input--lastname">
+            <input class="form__input" type="text" name="lastname" placeholder="Last Name" required>
+            <label class="form__label" for="lastname">Last Name</label>
+          </div>
+          <div class="form__input-wrapper form__input--email">
+            <input class="form__input" type="email" name="email" placeholder="Email" required>
+            <label class="form__label" for="email">Email</label>
+          </div>
+          <div class="form__input-wrapper form__input--message">
+            <textarea class="form__input form__input--textarea" name="message"
+              placeholder="What the Student Experience means to me*"></textarea>
+            <div class="form__notice">*optional</div>
+          </div>
+          <button class="form__input--submit" type="submit" form="signup-form">Submit</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="component site-footer">
+    <div class="component__content">
+      <div class="site-footer__info">
+        <h1 class="site-footer__logo">Caltech</h1>
+        <p class="site-footer__address">California Institute of Technology<br>1200 East California
+          Boulevard<br>Pasadena, California 91125</p>
+        <p class="site-footer__copyright">©2022 California Institute of Technology</p>
+      </div>
+      <h1 class="site-footer__contacts-head">Contact</h1>
+      <div class="site-footer__contacts">
+        <ul class="site-footer__contact-list">
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Undergrad Scholarships</h2><a class="site-footer__contact-email"
+              href="mailto:give.scholarships@caltech.edu">give.scholarships@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Graduate Fellowships</h2><a class="site-footer__contact-email"
+              href="mailto:give.fellowships@caltech.edu">give.fellowships@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Health & Wellness</h2><a class="site-footer__contact-email"
+              href="mailto:give.wellness@caltech.edu">give.wellness@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Career Advising</h2><a class="site-footer__contact-email"
+              href="mailto:give.advising@caltech.edu">give.advising@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Co-Curricular Experience</h2><a class="site-footer__contact-email"
+              href="mailto:give.experience@caltech.edu">give.experience@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">General Inquiries</h2><a class="site-footer__contact-email"
+              href="mailto:give@caltech.edu">give@caltech.edu</a><a class="site-footer__contact-email"
+              href="tel:626-395-4863">(626) 395-4863</a>
+          </li>
+        </ul>
+      </div>
+      <nav class="site-footer__nav" role="navigation" aria-label="Secondary Navigation">
+        <ul class="site-footer__nav-list">
+          <li class="site-footer__nav-list-item"><a class="site-footer__nav-list-link" href="#">About the Campaign</a>
+          </li>
+          <li class="site-footer__nav-list-item"><a class="site-footer__nav-list-link" href="#">Make a Gift</a></li>
+          <li class="site-footer__nav-list-item"><a class="site-footer__nav-list-link" href="#">Privacy Statement</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</body>
+<script src="{% static 'js/vendors~mains.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/mains.js' %}" type="text/javascript"></script>
+
+{%endblock%}
