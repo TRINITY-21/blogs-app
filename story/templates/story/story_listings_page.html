@@ -17,7 +17,34 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 
-</html>
+<style>
+  body {
+    animation: fadeIn 2.1s;
+
+  }
+
+  @keyframes fadeIn {
+    0% {
+      background-color: hsl(200, 20%, 70%);
+    }
+
+    10% {
+      background-color: hsl(200, 20%, 95%);
+    }
+
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+
 
 <body class="page-type-listing-page">
   <div class="icon-sprite" role="presentation">
@@ -104,6 +131,8 @@
       </div>
     </section>
     {%endfor%}
+
+
     <section class="component filters">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
@@ -118,7 +147,7 @@
           </div>
           {% endfor %}
         </div>
-
+        <div id="myID"></div>
         <!-- Check if tags  are availing for filtering and hide/show clear filter -->
         {% if '?tags=' in request.get_full_path %}
         <button class="filters__clear" onclick=clearAll()>Clear Filters
@@ -133,29 +162,38 @@
 
     <!-- Add Ajax and jquery cdn for ajax calls -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script>
-      function locations() {
-        //var id=20; get the value of id and save in id(getElementById or jquery)
-        window.location.href = 'www.example.com/page.html?id=' + id;
-      }
-    </script>
+
     <!-- Perform checkbox checked operations in js -->
     <script>
-      $(document).on('click', function (e) {
+      $(document).on('change', function (e) {
         let a = $('input:checkbox:checked').map(function () {
           return $(this).val()
         }).get()
         // alert(a)
         if (a != '') {
-          window.location = `/story-listings/?tags=${a}` || {}
+          window.location = `/story-listings/?tags=${a}`
 
         }
         else {
           window.location = `/story-listings/` || {}
 
         }
+
       })
     </script>
+
+    <script>
+
+      $(document).ready(function () {
+        let width = $(window).width();
+        let element = $("#myID");
+        let positionFromTop = element.offset().top + 600
+        $("html, body").animate({
+          scrollTop: Math.abs($(window).height() - positionFromTop)
+        }, 50);
+      });
+    </script>
+
 
     <!-- Clear all filters after Filtering -->
     <script>
@@ -216,6 +254,7 @@
         });
       })();
     </script>
+    </div>
 
 
     <section class="component teaser-list">

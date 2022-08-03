@@ -66,7 +66,8 @@
       <button class="site-header__menu-toggle js-nav-toggle" aria-label="Toggle Menu Visibility"><span></span></button>
       <nav class="site-header__nav" role="navigation" aria-label="Primary Navigation">
         <ul class="site-header__nav-list">
-          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/story-listings">Stories of
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" onclick=clearAll()
+              href="/story-listings">Stories of
               Impact</a>
           </li>
           <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/faq">About the
@@ -78,6 +79,23 @@
       </nav>
     </div>
   </header>
+
+  <!-- Add Ajax and jquery cdn for ajax calls -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+  <!-- Clear all filters after Filtering -->
+  <script>
+    function clearAll() {
+      $(document).on('click', function (e) {
+        var a = $('input:checkbox:checked').map(function () {
+          return $(this).val()
+        }).removeAttr(a)
+        // alert(a)
+        localStorage.clear()
+        window.location = `/story-listings/` || {}
+      })
+    }
+  </script>
   <main id="maincontent">
     <section class="component title-banner">
       <div class="component__background" role="presentation"></div>

@@ -99,10 +99,29 @@
     <section class="component link-banner">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
-        <div class="link-banner__content"><a class="link-banner__link" href="/story-listings">&lt; Back to Stories of
+        <div class="link-banner__content"><a class="link-banner__link" onclick=clearAll() href="/story-listings">&lt;
+            Back to Stories of
             Impact</a></div>
       </div>
     </section>
+
+    <!-- Add Ajax and jquery cdn for ajax calls -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- Clear all filters after Filtering -->
+    <script>
+      function clearAll() {
+        $(document).on('click', function (e) {
+          var a = $('input:checkbox:checked').map(function () {
+            return $(this).val()
+          }).removeAttr(a)
+          // alert(a)
+          localStorage.clear()
+          window.location = `/story-listings/` || {}
+        })
+      }
+    </script>
+
     <section class="component story-hero">
       <div class="story-hero__wrap">
         <div class="component__background" role="presentation"></div>
@@ -129,7 +148,8 @@
     {% for block in page.body %}
     <section class="component rte">
       {% include_block block %}
-      <a class="button" href="/story-listings">View All Stories</a><a class="button" href="#">Make A Gift Now</a>
+      <a class="button" onclick=clearAll() href="/story-listings">View All Stories</a><a class="button" href="#">Make A
+        Gift Now</a>
     </section>
 
     {%endfor%}
