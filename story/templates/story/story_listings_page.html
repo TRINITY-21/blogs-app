@@ -87,7 +87,8 @@
       </symbol>
     </svg>
   </div>
-  <header class="site-header"><a class="site-header__branding" href="/story-listings">Initiative for Students |
+  <header class="site-header"><a class="site-header__branding" onclick=clearAll() href="/story-listings">Initiative for
+      Students |
       Caltech</a>
     <div class="site-header__menu">
       <button class="site-header__menu-toggle js-nav-toggle" aria-label="Toggle Menu Visibility"><span></span></button>
@@ -182,8 +183,8 @@
       })
     </script>
 
+    <!-- add scroll to  bottom on checkbox click -->
     <script>
-
       $(document).ready(function () {
         let width = $(window).width();
         let element = $("#myID");
@@ -261,17 +262,16 @@
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
         <!-- Add Story Teasers -->
-        {% if self.story %}
-        {% for story in self.story %}
+        {% if story %}
+        {% for story in story %}
         {% with story=story.specific %}
         {% image story.featured_image fill-750x420 as banner %}
         <a class="component teaser" href="{% pageurl story %}">
           <figure class="teaser__img"><img src="{{banner.url}}" alt="Alt text"></figure>
           <div class="teaser__content">
             <p class="teaser__tags">{{story.primary_tag}}</p>
-            <h1 class="teaser__headline">Lorem ipsum dolor sit amet consectetuer adipiscing elit</h1>
-            <p class="teaser__copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Netus ornare maecenas sit
-              diam. Ut magnis aliquet mi augue vestibulum mauris.</p>
+            <h1 class="teaser__headline">{{story.custom_title}}</h1>
+            <p class="teaser__copy">{{story.summary}}</p>
             <div class="teaser__cta">Learn More</div>
           </div>
           {%endwith%}
@@ -282,22 +282,93 @@
       </div>
     </section>
 
-    <section class="component pagination">
-      <button class="pagination__first is-disabled" title="First" disabled>
-        <<< </button>
 
-          <button class="pagination__prev" title="Previous" disabled>
+    <!-- Add pagination  and check if checkboxes are checked-->
+    {% if story.paginator.num_pages > 1 and '?tags=' not in request.get_full_path%}
+    <section class="component pagination">
+      <!-- story first page -->
+      {% if story.has_other_pages %}
+
+      <button class="pagination__first" title="First" onclick="location.href='?page=1'">
+        <<< </button>
+          {%endif%}
+
+          <!-- if story has a previous page -->
+          {% if story.has_previous %}
+
+          <button class="pagination__prev" title="Previous"
+            onclick="location.href='?page={{ story.previous_page_number }}'">
             << </button>
-              <button class="pagination__page">1</button>
-              <button class="pagination__page is-active">2</button>
-              <button class="pagination__page">3</button>
-              <button class="pagination__page">4</button>
-              <button class="pagination__page">5</button>
-              <button class="pagination__page">6</button>
-              <button class="pagination__page">7</button>
-              <button class="pagination__next" title="Next">></button>
-              <button class="pagination__last" title="Last">>></button>
+              {% endif %}
+              <!-- if story page number range -->
+
+              {% for page_num in story.paginator.page_range %}
+              <button class="pagination__page {% if page_num == story.number %} is-active {% endif %}"
+                onclick="location.href='?page={{ page_num }}'">
+                {{page_num}}
+              </button>
+              {%endfor%}
+
+              <!-- if story has a next page -->
+              {% if story.has_next %}
+              <button class="pagination__next" onclick="location.href='?page={{ story.next_page_number }}'"
+                title="Next">></button>
+              {% endif %}
+
+              <!-- story last page -->
+
+              {% if story.paginator.num_pages %}
+              <button class="pagination__last" title="Last"
+                onclick="location.href='?page={{ story.paginator.num_pages }}'">>></button>
+              {% endif %}
+
     </section>
+    {%endif%}
+
+    {% if '?tags=' in request.get_full_path %}
+    <section class="component pagination">
+      <!-- story first page -->
+      {% if story.has_other_pages %}
+      <button class="pagination__first" title="First" onclick="location.href='{{request.get_full_path}}&page=1'">
+        <<< </button>
+          {%endif%}
+
+          <!-- if story has a previous page -->
+          {% if story.has_previous %}
+
+          <button class="pagination__prev" title="Previous"
+            onclick="location.href='{{request.get_full_path}}&page={{ story.previous_page_number }}'">
+            << </button>
+              {% endif %}
+              <!-- if story page number range -->
+
+              {% for page_num in story.paginator.page_range %}
+              <button class="pagination__page {% if page_num == story.number %} is-active {% endif %}"
+                onclick="location.href='{{request.get_full_path}}&page={{ page_num }}'">
+                {{page_num}}
+              </button>
+              {%endfor%}
+
+              <!-- if story has a next page -->
+              {% if story.has_next %}
+              <button class="pagination__next"
+                onclick="location.href='{{request.get_full_path}}&page={{ story.next_page_number }}'"
+                title="Next">></button>
+              {% endif %}
+
+              <!-- story last page -->
+
+              {% if story.paginator.num_pages %}
+              <button class="pagination__last" title="Last"
+                onclick="location.href='{{request.get_full_path}}&page={{ story.paginator.num_pages }}'">>></button>
+              {% endif %}
+
+    </section> {%endif%}
+
+    <!-- Add pagination on checkbox tag select -->
+
+
+
     <section class="component form-cta">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">

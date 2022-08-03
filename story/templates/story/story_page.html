@@ -78,7 +78,8 @@
       </symbol>
     </svg>
   </div>
-  <header class="site-header"><a class="site-header__branding" href="#">Initiative for Students | Caltech</a>
+  <header class="site-header"><a class="site-header__branding" onclick=clearAll() href="/story-listings">Initiative for
+      Students | Caltech</a>
     <div class="site-header__menu">
       <button class="site-header__menu-toggle js-nav-toggle" aria-label="Toggle Menu Visibility"><span></span></button>
       <nav class="site-header__nav" role="navigation" aria-label="Primary Navigation">
@@ -129,9 +130,9 @@
           <p class="story-hero__eyebrow">{{self.primary_tag}}</p>
           <h1 class="story-hero__title">{{self.custom_title}}</h1>
           <p class="story-hero__author">{{self.author.firstname}} {{self.author.lastname}},
-            {{self.co_author.co_firstname}}
-            {{self.co_author.co_lastname}}</p>
-          <p class="story-hero__author">{{self.author.job_title}}, {{self.co_author.co_job_title}}</p>
+            {{self.co_author.firstname}}
+            {{self.co_author.lastname}}</p>
+          <p class="story-hero__author">{{self.author.job_title}}, {{self.co_author.job_title}}</p>
         </div>
       </div>
       <!-- add image -->

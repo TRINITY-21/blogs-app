@@ -54,7 +54,7 @@ class StoryListingsPage(RoutablePageMixin, Page):
         print(context['story'], 'stories')
         return context
     else:
-        per_page = 3
+        per_page = 4
         paginator = Paginator(self.story, per_page)
         # page = self.page_num
         page = request.GET.get("page")
@@ -72,7 +72,7 @@ class StoryListingsPage(RoutablePageMixin, Page):
 
   # get all stories
   def get_stories(self):
-    return StoryPage.objects.all().order_by('-first_published_at').live()
+    return StoryPage.objects.descendant_of(self).order_by('-first_published_at').live()
 
   # get all tags
   def get_tags(self):
@@ -91,6 +91,7 @@ class StoryListingsPage(RoutablePageMixin, Page):
     if(tag_url== None):
       self.story = self.get_stories()
       self.page_num = int(page_num)
+      print(page_num)
       return self.serve(request)
 
     tag_url_list = tag_url.split(',')
@@ -128,12 +129,14 @@ class StoryPage(Page):
     "story.Author",
     on_delete=models.SET_NULL,
     null=True,blank=True,
+    related_name='author'
   )
 
   co_author = models.ForeignKey(
-    "story.CoAuthor",
+    "story.Author",
     on_delete=models.SET_NULL,
     null=True,blank=True,
+    related_name='co_author'
 
   )
 
@@ -199,36 +202,6 @@ class Author(models.Model):
 
     """Register as snippet"""
 register_snippet(Author)
-
-
-# Co Authors Model
-class CoAuthor(models.Model):
-  """ Story Author for snippets."""
-  co_firstname = models.CharField(max_length=100,null=True,blank=True)
-  co_lastname = models.CharField(max_length=100,null=True,blank=True)
-  co_job_title = models.CharField(max_length=100,null=True,blank=True)
-
-  panels = [
-    MultiFieldPanel(
-      [
-        FieldPanel("co_firstname"),
-        FieldPanel("co_lastname"),
-        FieldPanel("co_job_title"),
-      ],
-      heading="Name and Job Title Of Co Author",
-    ),
-  ]
-
-  def __str__(self):
-    """String repr of this class."""
-    return self.co_firstname
-
-  class Meta:
-    verbose_name = "Story Co-Author"
-    verbose_name_plural = "Story Co-Authors"
-
-    """Register as snippet"""
-register_snippet(CoAuthor)
 
 
 # Secondary tags model to be used for filtering and every story can have one or more
