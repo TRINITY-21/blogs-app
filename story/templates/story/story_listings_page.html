@@ -124,7 +124,7 @@
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
         <div class="image-hero__content">
-          <p class="image-hero__eyebrow">{{story.primary_tag}}</p>
+          <p class="image-hero__eyebrow">{{story.display_tags}}</p>
           <h1 class="image-hero__headline">{{story.custom_title}}</h1>
           <p class="image-hero__copy">{{story.summary}}</p><a class="image-hero__cta" href="{% pageurl story %}">Learn
             More</a>
@@ -269,7 +269,7 @@
         <a class="component teaser" href="{% pageurl story %}">
           <figure class="teaser__img"><img src="{{banner.url}}" alt="Alt text"></figure>
           <div class="teaser__content">
-            <p class="teaser__tags">{{story.primary_tag}}</p>
+            <p class="teaser__tags">{{story.display_tags}}</p>
             <h1 class="teaser__headline">{{story.custom_title}}</h1>
             <p class="teaser__copy">{{story.summary}}</p>
             <div class="teaser__cta">Learn More</div>

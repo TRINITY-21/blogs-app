@@ -36,7 +36,7 @@ class StoryListingsPage(RoutablePageMixin, Page):
 
     if tag_string:
         tags = re.split('[,;|]', tag_string.lower())
-        tag_story = StoryPage.objects.filter(secondary_tags__slug__in=tags).order_by('-first_published_at')
+        tag_story = StoryPage.objects.filter(tags__slug__in=tags).order_by('-first_published_at')
 
         """Pagination"""
         per_page = 2
@@ -51,7 +51,6 @@ class StoryListingsPage(RoutablePageMixin, Page):
         except EmptyPage:
           story = paginator.page(paginator.num_pages)
         context['story'] = story
-        print(context['story'], 'stories')
         return context
     else:
         per_page = 4
@@ -82,6 +81,9 @@ class StoryListingsPage(RoutablePageMixin, Page):
   def header_story(self):
     return StoryPage.objects.filter().live().order_by('-first_published_at')[:1]
 
+  # add select featured home page content
+  
+
   # route to get all stores with pagination parameters
   @route(r'^$(?:page=(?P<page_num>\d+)/)?')
   def all_stories(self, request,page_num=1, *args, **kwargs):
@@ -91,11 +93,10 @@ class StoryListingsPage(RoutablePageMixin, Page):
     if(tag_url== None):
       self.story = self.get_stories()
       self.page_num = int(page_num)
-      print(page_num)
       return self.serve(request)
 
     tag_url_list = tag_url.split(',')
-    self.story = self.get_stories().filter(secondary_tags__slug__in=tag_url_list).order_by('-first_published_at')
+    self.story = self.get_stories().filter(tags__slug__in=tag_url_list).order_by('-first_published_at')
     self.page_num = int(page_num)
     return self.serve(request)
 
@@ -112,7 +113,7 @@ class StoryPage(Page):
     )
   body = StreamField(BodyBlock(),null=True,blank=True,)
   # primary_tags = ClusterTaggableManager(through="story.StoryPagePrimaryTag",related_name='primary_tags',blank=True,)
-  secondary_tags = ClusterTaggableManager(through="story.StoryPageSecondaryTag",blank=True)
+  tags = ClusterTaggableManager(through="story.StoryPageSecondaryTag",blank=True)
   custom_title = models.CharField(
     max_length=100,
     null=True,
@@ -141,7 +142,7 @@ class StoryPage(Page):
   )
 
   # every story can have one primary tag to be displayed on the frontend
-  primary_tag = models.CharField(
+  display_tags = models.CharField(
     max_length=100,
     blank=True,
     null=True,
@@ -161,13 +162,19 @@ class StoryPage(Page):
   FieldPanel("summary"),
   SnippetChooserPanel("author"),
   SnippetChooserPanel("co_author"),
-  FieldPanel("primary_tag"),
-  MultiFieldPanel(
+    MultiFieldPanel(
       [
-          FieldPanel("secondary_tags"),
+          FieldPanel("tags"),
       ],
-      heading="Secondary Tags",
+      heading="Tags",
     ),
+      MultiFieldPanel(
+      [
+  FieldPanel("display_tags"),
+      ],
+      heading="Choose tag to display",
+    ),
+
   ImageChooserPanel("featured_image"),
   StreamFieldPanel("body"),
 
