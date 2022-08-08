@@ -116,21 +116,23 @@
       </div>
     </section>
 
-    <!-- add header listings story by current story -->
-    {% for story in self.header_story %}
-    {% image story.featured_image original as banner %}
+    <!-- add featured page to listings -->
+    {% for fp in page.get_featured_page %}
+    {% with fp=fp.specific %}
+    {% image fp.featured_image original as banner %}
 
     <section class="component image-hero">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
         <div class="image-hero__content">
-          <p class="image-hero__eyebrow">{{story.display_tags}}</p>
-          <h1 class="image-hero__headline">{{story.custom_title}}</h1>
-          <p class="image-hero__copy">{{story.summary}}</p><a class="image-hero__cta" href="{% pageurl story %}">Learn
+          <p class="image-hero__eyebrow">{{fp.display_tags}}</p>
+          <h1 class="image-hero__headline">{{fp.custom_title}}</h1>
+          <p class="image-hero__copy">{{fp.summary}}</p><a class="image-hero__cta" href="{% pageurl fp %}">Learn
             More</a>
         </div><img class="image-hero__image" src="{{banner.url}}" alt="Smiling students">
       </div>
     </section>
+    {%endwith%}
     {%endfor%}
 
 

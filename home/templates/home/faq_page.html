@@ -127,11 +127,10 @@
               aria-controls="{{faq.custom_title}}"><span class="accordion__title">Q. {{faq.title}}<span
                   class="accordion__icon"></span></span></button>
           </h3>
-          <div class="accordion__panel" id="{{faq.custom_title}}" role="region" aria-labelledby="{{faq.slug}}"
-            hidden="">
+          <div class="accordion__copy" id="{{faq.custom_title}}" role="region" aria-labelledby="{{faq.slug}}" hidden="">
             <!-- add faq body from richtext -->
             {% for block in faq.body %}
-            <p style="font-size: 10px;">{% include_block block %}</p>
+            {% include_block block %}
             {%endfor%}
             <p class="accordion__link"><a href="/story-listings">Read Impact Stories</a></p>
             <p class="accordion__link"><a href="#">Give Now</a></p>

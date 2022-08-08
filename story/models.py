@@ -81,9 +81,18 @@ class StoryListingsPage(RoutablePageMixin, Page):
   def header_story(self):
     return StoryPage.objects.filter().live().order_by('-first_published_at')[:1]
 
-  # add select featured home page content
-  
+  # add select featured page content
+  def get_featured_page(self):
+    fp = FeaturedPage.objects.all()
 
+    for fps in fp:
+      fp_info = StoryPage.objects.filter(title=fps.featured)
+      for fp_infos in fp_info:
+        print('fppp',fp_infos.featured_image)
+    print( ' isee',fp_infos)
+
+    return fp_info
+ 
   # route to get all stores with pagination parameters
   @route(r'^$(?:page=(?P<page_num>\d+)/)?')
   def all_stories(self, request,page_num=1, *args, **kwargs):
@@ -227,7 +236,13 @@ class SecondaryTag(TaggitTag):
 class StoryPageSecondaryTag(TaggedItemBase):
   content_object = ParentalKey("StoryPage", related_name="secondarystory_tags")
 
+  # add story featured page to story listings
+class FeaturedPage(Page):
+    featured = models.ForeignKey('StoryPage',
+            related_name='+',
+            on_delete=models.SET_NULL,
+            null=True, blank=True)
 
-
-
-
+    content_panels = Page.content_panels + [
+        FieldPanel('featured'),
+    ]
