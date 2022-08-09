@@ -29,7 +29,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
-from story.blocks import BodyBlock
+from story.blocks import BodyBlock, CTABlock
 
 
 
@@ -43,16 +43,17 @@ class HomePage(Page):
 class FaqPage(Page):
   template = "home/faq_page.html"
   body = StreamField(BodyBlock(),null=True,blank=True,)
-  custom_title = models.CharField(
-    max_length=100,
-    null=True,
-    blank=True,
-    help_text='Overwrites the default title',
-  )
+  content = StreamField(
+        [
+            ("cta", CTABlock()),
+        ],
+        null=True,
+        blank=True,
+    )
 
   content_panels = Page.content_panels + [
-  FieldPanel('custom_title'),
   StreamFieldPanel("body"),
+  StreamFieldPanel("content"),
 
   ]
 
@@ -72,6 +73,7 @@ class FaqPage(Page):
 
   def faqs(self):
     all_faq = FaqPage.objects.descendant_of(self).live().order_by('-first_published_at')
+    print('alll',all_faq)
     return all_faq
 
 

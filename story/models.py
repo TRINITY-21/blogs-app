@@ -18,7 +18,18 @@ from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
-
+from modelcluster.fields import ParentalKey
+from wagtail.admin.edit_handlers import (
+    FieldPanel,
+    FieldRowPanel,
+    InlinePanel,
+    MultiFieldPanel
+)
+from wagtail.core.fields import RichTextField
+from wagtail.contrib.forms.models import (
+    AbstractEmailForm,
+    AbstractFormField
+)
 # local models
 from .blocks import BodyBlock
 
@@ -77,22 +88,13 @@ class StoryListingsPage(RoutablePageMixin, Page):
   def get_tags(self):
     return SecondaryTag.objects.all()
 
-  # get header story on listing page by recent story
-  def header_story(self):
-    return StoryPage.objects.filter().live().order_by('-first_published_at')[:1]
-
   # add select featured page content
   def get_featured_page(self):
     fp = FeaturedPage.objects.all()
-
     for fps in fp:
       fp_info = StoryPage.objects.filter(title=fps.featured)
-      for fp_infos in fp_info:
-        print('fppp',fp_infos.featured_image)
-    print( ' isee',fp_infos)
+      return fp_info
 
-    return fp_info
- 
   # route to get all stores with pagination parameters
   @route(r'^$(?:page=(?P<page_num>\d+)/)?')
   def all_stories(self, request,page_num=1, *args, **kwargs):
@@ -111,7 +113,7 @@ class StoryListingsPage(RoutablePageMixin, Page):
 
 
 # Story Page Model.
-class StoryPage(Page):
+class StoryPage(AbstractEmailForm,Page):
   template = "story/story_page.html"
   featured_image = models.ForeignKey(
     "wagtailimages.Image",
@@ -123,12 +125,6 @@ class StoryPage(Page):
   body = StreamField(BodyBlock(),null=True,blank=True,)
   # primary_tags = ClusterTaggableManager(through="story.StoryPagePrimaryTag",related_name='primary_tags',blank=True,)
   tags = ClusterTaggableManager(through="story.StoryPageSecondaryTag",blank=True)
-  custom_title = models.CharField(
-    max_length=100,
-    null=True,
-    blank=True,
-    help_text='Overwrites the default title',
-  )
   summary = models.CharField(
     max_length=100,
     null=True,
@@ -165,29 +161,55 @@ class StoryPage(Page):
     ]
   )
 
+  # add contact us details
+  # description = models.CharField(max_length=255, blank=True, null=True)
+  thank_you_text = RichTextField(blank=True)
 
-  content_panels = Page.content_panels + [
-  FieldPanel('custom_title'),
+  content_panels =  Page.content_panels + [
   FieldPanel("summary"),
   SnippetChooserPanel("author"),
   SnippetChooserPanel("co_author"),
-    MultiFieldPanel(
+  MultiFieldPanel(
       [
-          FieldPanel("tags"),
+      FieldPanel("tags"),
       ],
       heading="Tags",
     ),
       MultiFieldPanel(
       [
-  FieldPanel("display_tags"),
+      FieldPanel("display_tags"),
       ],
       heading="Choose tag to display",
     ),
 
   ImageChooserPanel("featured_image"),
   StreamFieldPanel("body"),
+  # FieldPanel('description', classname="full"),
+  InlinePanel('custom_form_field', label="Form fields"),
+  FieldPanel('thank_you_text', classname="full"),
+  MultiFieldPanel([
+      FieldRowPanel([
 
+      FieldPanel('from_address', classname="col6"),
+      FieldPanel('to_address', classname="col6"),
+      ]),
+      FieldPanel('subject'),
+  ], "Email Notification Config"),
   ]
+
+  #get all form fields
+  def get_form_fields(self):
+          return self.custom_form_field.all()
+
+  # add form fields for contact us page
+class FormField(AbstractFormField):
+    page = ParentalKey(
+        'StoryPage',
+        on_delete=models.SET_NULL,
+        related_name='custom_form_field',
+        blank=True,
+        null=True,
+    )
 
 
 # Authors Model
@@ -227,7 +249,7 @@ class SecondaryTag(TaggitTag):
   class Meta:
     proxy = True
     verbose_name = "Secondary Tags"
-    verbose_name_plural = "Secondary Tags"
+    verbose_name_plural = "Secondary Tags (DO NOT EDIT)"
 
   def get_secondary_tag(self):
     return self.objects.all()

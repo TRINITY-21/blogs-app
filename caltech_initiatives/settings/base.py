@@ -25,6 +25,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
     # local apps
+    'crispy_forms',
     'story',
     'home',
     'search',
