@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load contact_tags %}
 
-{% load static %}
+{% load static%}
 
 {% load crispy_forms_tags %}
 
@@ -203,31 +204,68 @@
     </section>
 
     {%endfor%}
-    <section class="component form-cta">
+
+    {% contact_form %}
+
+    <!-- <section class="component form-cta">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
         <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
-        <form class="form" action="" id="signup-form">
-          <div class="form__input_wrapper form__input">{{form.as_p}}</div>
+
+        <form class="form" action="" id="signup-form" action="{% pageurl page %}" method="POST" role="form">
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+          <div class="form__input-wrapper form__input--{{ field.field.widget.attrs.field_classname }}">
+            {{ field.errors }}
+
+            {% if field.field.widget.input_type %}
+
+            <input type="{{ field.field.widget.input_type }}" class="form__input" name="{{ field.name }}"
+              id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required%}required="required" {% endif %}>
+            <label class="form__label" for="{{ field.label }}" for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+            {% else %}
+
+            <textarea type="{{ field.field.widget.input_type }}" class="form__input form__input--textarea" name="{{ field.name }}"
+              id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required  %}required="required" {% endif %}></textarea>
+            <div class="form__notice">*optional</div>
+
+            {% endif %}
+          </div>
+          {% endfor %}
+
+
           <button class="form__input--submit" type="submit" form="signup-form">Submit</button>
         </form>
 
 
       </div>
-    </section>
-
-    <form action="" method="POST">
-      <div class="topic">Send us a message</div>
-
+    </section> -->
+    <!--
+    <form action="{% pageurl page %}" method="POST" role="form">
       {% csrf_token %}
-      <ul>
-        {{ form.as_p }}
-      </ul>
 
-      <div class="input-box">
-        <input type="submit" value="Send Message">
+      {% for field in form.visible_fields %}
+      <div class="form__input-wrapper form__input--{{ field.field.widget.attrs.field_classname }}">
+        {{ field.errors }}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+
+        {% if field.field.widget.input_type %}
+
+        <input type="{{ field.field.widget.input_type }}" class="form__input" name="{{ field.name }}"
+          id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required %}required="required" {% endif %}>
+
+        {% else %}
+
+        <textarea type="{{ field.field.widget.input_type }}" class="form__input form__input--textarea" name="{{ field.name }}"
+          id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.require%}required="required" {% endif %}></textarea>
+        <div class="form__notice">*optional</div>
+        {% endif %}
       </div>
-    </form>
+      {% endfor %}
+
+      <input type="submit">
+    </form> -->
   </main>
 </body>
 <script src="{% static 'js/vendors~mains.js' %}" type="text/javascript"></script>

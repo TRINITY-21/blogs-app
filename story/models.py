@@ -1,7 +1,7 @@
 """Story listing and Story detail pages."""
 from __future__ import unicode_literals
 import re
-from django.db.models.functions import Lower
+from wagtail.contrib.forms.forms import FormBuilder
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -112,6 +112,36 @@ class StoryListingsPage(RoutablePageMixin, Page):
     return self.serve(request)
 
 
+
+class CustomFormBuilder(FormBuilder):
+    def get_create_field_function(self, type):
+        """
+        Override the method to prepare a wrapped function that will call the original
+        function (which returns a field) and update the widget's attrs with a custom
+        value that can be used within the template when rendering each field.
+        """
+
+        create_field_function = super().get_create_field_function(type)
+        # self.fields['name'].widget.attrs.update({'class': 'special'})
+
+        def wrapped_create_field_function(field, options):
+
+            created_field = create_field_function(field, options)
+            created_field.widget.attrs.update(
+             # {"class": field.field_classname} # Important: using the class may be sufficient, depending on how your form is being rendered, try this first.
+             {"field_classname": field.field_classname} # this is a non-standard attribute and will require custom template rendering of your form to work
+            )
+
+            created_field.widget.attrs.update(
+             {"placeholder": field.placeholder}
+            )
+
+            print(created_field)
+
+            return created_field
+
+        return wrapped_create_field_function
+
 # Story Page Model.
 class StoryPage(AbstractEmailForm,Page):
   template = "story/story_page.html"
@@ -185,16 +215,16 @@ class StoryPage(AbstractEmailForm,Page):
   ImageChooserPanel("featured_image"),
   StreamFieldPanel("body"),
   # FieldPanel('description', classname="full"),
-  InlinePanel('custom_form_field', label="Form fields"),
-  FieldPanel('thank_you_text', classname="full"),
-  MultiFieldPanel([
-      FieldRowPanel([
+  # InlinePanel('custom_form_field', label="Form fields"),
+  # FieldPanel('thank_you_text', classname="full"),
+  # MultiFieldPanel([
+  #     FieldRowPanel([
 
-      FieldPanel('from_address', classname="col6"),
-      FieldPanel('to_address', classname="col6"),
-      ]),
-      FieldPanel('subject'),
-  ], "Email Notification Config"),
+  #     FieldPanel('from_address', classname="col6"),
+  #     FieldPanel('to_address', classname="col6"),
+  #     ]),
+  #     FieldPanel('subject'),
+  # ], "Email Notification Config"),
   ]
 
   #get all form fields
@@ -203,13 +233,47 @@ class StoryPage(AbstractEmailForm,Page):
 
   # add form fields for contact us page
 class FormField(AbstractFormField):
-    page = ParentalKey(
-        'StoryPage',
-        on_delete=models.SET_NULL,
-        related_name='custom_form_field',
-        blank=True,
-        null=True,
-    )
+
+    page = ParentalKey("ContactPage", related_name="form_fields", on_delete=models.SET_NULL, null=True)
+
+    # add custom fields to FormField model
+    field_classname = models.CharField("Field classes", max_length=254, blank=True)
+    placeholder = models.CharField("Placeholder", max_length=254, blank=True)
+
+    # revise panels so that the field can be edited in the admin UI
+    panels = AbstractFormField.panels + [
+        FieldPanel("field_classname"),
+        FieldPanel("placeholder"),
+    ]
+
+
+class ContactPage(AbstractEmailForm):
+    form_builder = CustomFormBuilder
+
+    template = "contact/contact_page.html"
+    # This is the default path.
+    # If ignored, Wagtail adds _landing.html to your template name
+    landing_page_template = "contact/contact_page_landing.html"
+
+    intro = RichTextField(blank=True)
+    thank_you_text = RichTextField(blank=True)
+
+    content_panels = AbstractEmailForm.content_panels + [
+        FieldPanel('intro'),
+        InlinePanel('form_fields', label='Form Fields'),
+        FieldPanel('thank_you_text'),
+        MultiFieldPanel([
+            FieldRowPanel([
+                FieldPanel('from_address', classname="col6"),
+                FieldPanel('to_address', classname="col6"),
+            ]),
+            FieldPanel("subject"),
+        ], heading="Email Settings"),
+    ]
+
+
+
+
 
 
 # Authors Model
