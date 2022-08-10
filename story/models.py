@@ -30,12 +30,43 @@ from wagtail.contrib.forms.models import (
     AbstractEmailForm,
     AbstractFormField
 )
+from contact.models import ContactUsPage
 # local models
 from .blocks import BodyBlock
 
 
 # Stories Listing page
+class CustomFormBuilder(FormBuilder):
+    def get_create_field_function(self, type):
+        """
+        Override the method to prepare a wrapped function that will call the original
+        function (which returns a field) and update the widget's attrs with a custom
+        value that can be used within the template when rendering each field.
+        """
+
+        create_field_function = super().get_create_field_function(type)
+        # self.fields['name'].widget.attrs.update({'class': 'special'})
+
+        def wrapped_create_field_function(field, options):
+
+            created_field = create_field_function(field, options)
+            created_field.widget.attrs.update(
+             # {"class": field.field_classname} # Important: using the class may be sufficient, depending on how your form is being rendered, try this first.
+             {"field_classname": field.field_classname} # this is a non-standard attribute and will require custom template rendering of your form to work
+            )
+
+            created_field.widget.attrs.update(
+             {"placeholder": field.placeholder}
+            )
+
+            print(created_field)
+
+            return created_field
+
+        return wrapped_create_field_function
+
 class StoryListingsPage(RoutablePageMixin, Page):
+
   template = "story/story_listings_page.html"
 
   # overwrite context returned to include pagination
@@ -95,6 +126,16 @@ class StoryListingsPage(RoutablePageMixin, Page):
       fp_info = StoryPage.objects.filter(title=fps.featured)
       return fp_info
 
+
+  def get_contact_form_page(self):
+        form =  ContactUsPage.objects.get(slug='contact-me')
+        print('form', form)
+        return form
+
+  def get_contact_form(self):
+        form = self.get_contact_form_page().get_form()
+        print('formm',form)
+        return form
   # route to get all stores with pagination parameters
   @route(r'^$(?:page=(?P<page_num>\d+)/)?')
   def all_stories(self, request,page_num=1, *args, **kwargs):
@@ -112,38 +153,8 @@ class StoryListingsPage(RoutablePageMixin, Page):
     return self.serve(request)
 
 
-
-class CustomFormBuilder(FormBuilder):
-    def get_create_field_function(self, type):
-        """
-        Override the method to prepare a wrapped function that will call the original
-        function (which returns a field) and update the widget's attrs with a custom
-        value that can be used within the template when rendering each field.
-        """
-
-        create_field_function = super().get_create_field_function(type)
-        # self.fields['name'].widget.attrs.update({'class': 'special'})
-
-        def wrapped_create_field_function(field, options):
-
-            created_field = create_field_function(field, options)
-            created_field.widget.attrs.update(
-             # {"class": field.field_classname} # Important: using the class may be sufficient, depending on how your form is being rendered, try this first.
-             {"field_classname": field.field_classname} # this is a non-standard attribute and will require custom template rendering of your form to work
-            )
-
-            created_field.widget.attrs.update(
-             {"placeholder": field.placeholder}
-            )
-
-            print(created_field)
-
-            return created_field
-
-        return wrapped_create_field_function
-
 # Story Page Model.
-class StoryPage(AbstractEmailForm,Page):
+class StoryPage(Page):
   template = "story/story_page.html"
   featured_image = models.ForeignKey(
     "wagtailimages.Image",
@@ -191,10 +202,6 @@ class StoryPage(AbstractEmailForm,Page):
     ]
   )
 
-  # add contact us details
-  # description = models.CharField(max_length=255, blank=True, null=True)
-  thank_you_text = RichTextField(blank=True)
-
   content_panels =  Page.content_panels + [
   FieldPanel("summary"),
   SnippetChooserPanel("author"),
@@ -214,22 +221,16 @@ class StoryPage(AbstractEmailForm,Page):
 
   ImageChooserPanel("featured_image"),
   StreamFieldPanel("body"),
-  # FieldPanel('description', classname="full"),
-  # InlinePanel('custom_form_field', label="Form fields"),
-  # FieldPanel('thank_you_text', classname="full"),
-  # MultiFieldPanel([
-  #     FieldRowPanel([
-
-  #     FieldPanel('from_address', classname="col6"),
-  #     FieldPanel('to_address', classname="col6"),
-  #     ]),
-  #     FieldPanel('subject'),
-  # ], "Email Notification Config"),
   ]
 
-  #get all form fields
-  def get_form_fields(self):
-          return self.custom_form_field.all()
+  def get_contact_form_page(self):
+        form =  ContactUsPage.objects.get(slug='contact-me')
+         
+        print('formm', form)
+        return form
+
+  def get_contact_form(self):
+        return self.get_contact_form_page().get_form()
 
   # add form fields for contact us page
 class FormField(AbstractFormField):
@@ -270,10 +271,6 @@ class ContactPage(AbstractEmailForm):
             FieldPanel("subject"),
         ], heading="Email Settings"),
     ]
-
-
-
-
 
 
 # Authors Model

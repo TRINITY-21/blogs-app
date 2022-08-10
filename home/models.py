@@ -29,6 +29,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
+from story.models import ContactPage
 from story.blocks import BodyBlock, CTABlock
 
 
@@ -76,4 +77,13 @@ class FaqPage(Page):
     print('alll',all_faq)
     return all_faq
 
+  # get form fields
+  def get_contact_form_page(self):
+        form =  ContactPage.objects.get(slug='contact-us')
+        print('form', form)
+        return form
 
+  def get_contact_form(self):
+        form = self.get_contact_form_page().get_form()
+        print('formm',form)
+        return form

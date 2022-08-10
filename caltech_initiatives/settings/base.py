@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'story',
     'home',
     'search',
+    'contact',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -174,3 +175,5 @@ BASE_URL = 'http://example.com'
 
 #Embed video in richtezt to be responsive
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
+# Form processing on submit
+WAGTAILSTREAMFORMS_ENABLE_FORM_PROCESSING = False
