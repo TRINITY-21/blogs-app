@@ -29,7 +29,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
-from story.models import ContactPage
+from contact.models import ContactUsPage
 from story.blocks import BodyBlock, CTABlock
 
 
@@ -37,14 +37,54 @@ from story.blocks import BodyBlock, CTABlock
 
 
 class HomePage(Page):
-    pass
+  # subpages home page can create
+  subpage_types = [
+          'story.StoryListingsPage',
+          'home.FaqsPage',
+          'story.FeaturedPage',
+          'contact.ContactUsPage',
+
+      ]
+
+      # register parent page
+  parent_page_type = [
+          'wagtailcore.Page'
+      ]
+  pass
 
 
 # FAQ Page Model.
+class FaqsPage(RoutablePageMixin, Page):
+  subpage_types = [
+          'home.FaqPage',
+      ]
+
+      # register parent page
+  parent_page_type = [
+          'wagtailcore.Page'
+      ]
+
+  # get form fields
+  def get_contact_form_page(self):
+        form =  ContactUsPage.objects.get(slug='contact-us')
+        return form
+
+  def get_contact_form(self):
+        form = self.get_contact_form_page().get_form()
+        return form
+
+  def faqs(self):
+    all_faq = FaqPage.objects.descendant_of(self).live().order_by('-first_published_at')
+    return all_faq
+
+
 class FaqPage(Page):
   template = "home/faq_page.html"
+  subpage_types = []
+  parent_page_type = []
+
   body = StreamField(BodyBlock(),null=True,blank=True,)
-  content = StreamField(
+  links = StreamField(
         [
             ("cta", CTABlock()),
         ],
@@ -54,36 +94,10 @@ class FaqPage(Page):
 
   content_panels = Page.content_panels + [
   StreamFieldPanel("body"),
-  StreamFieldPanel("content"),
+  StreamFieldPanel("links"),
 
   ]
 
-  def get_context(self, request, *args, **kwargs):
-    """Adding custom stuff to our context."""
-    context = super().get_context(request, *args, **kwargs)
-    # Get all faq
-    all_faq = FaqPage.objects.descendant_of(self).live().order_by('-first_published_at')
-    context['faqss'] = all_faq
-
-    # for faq in context['faqs']:
-    #     context['faq'] = faq
-    # print(context['faq'])
-
-    return context
 
 
-  def faqs(self):
-    all_faq = FaqPage.objects.descendant_of(self).live().order_by('-first_published_at')
-    print('alll',all_faq)
-    return all_faq
 
-  # get form fields
-  def get_contact_form_page(self):
-        form =  ContactPage.objects.get(slug='contact-us')
-        print('form', form)
-        return form
-
-  def get_contact_form(self):
-        form = self.get_contact_form_page().get_form()
-        print('formm',form)
-        return form

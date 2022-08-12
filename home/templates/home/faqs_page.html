@@ -117,7 +117,7 @@
       </div>
     </section>
     <!-- add faq  -->
-    {% for faq in self.faqs %}
+    {% for faq in page.faqs %}
     <section class="component accordion">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
@@ -133,7 +133,7 @@
             {%endfor%}
 
             <!-- add cta to faq -->
-            {% for block in faq.content %}
+            {% for block in faq.links %}
             {% include_block block %}
             {% endfor %}
           </div>
@@ -151,7 +151,7 @@
 
     {% with self.get_contact_form as form %}
 
-    <form class="form" id="signup-form" action="{% pageurl page.get_contact_form_page %}" method="POST" role="form">
+    <form class="form" id="signup-form" action="{% pageurl self.get_contact_form_page %}" method="POST" role="form">
       {% csrf_token %}
       {% for field in form.visible_fields %}
       <div class="form__input-wrapper form__input--{{ field.field.widget.attrs.field_classname }}">

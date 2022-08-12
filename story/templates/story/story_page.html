@@ -179,10 +179,13 @@
         <div class="component__content">
           <p class="story-hero__eyebrow">{{self.display_tags}}</p>
           <h1 class="story-hero__title">{{self.title}}</h1>
-          <p class="story-hero__author">{{self.author.firstname}} {{self.author.lastname}},
+          <p class="story-hero__author">{{self.author.firstname}}  {{self.author.lastname}}
+            {%if self.co_author%},
             {{self.co_author.firstname}}
-            {{self.co_author.lastname}}</p>
-          <p class="story-hero__author">{{self.author.job_title}}, {{self.co_author.job_title}}</p>
+            {{self.co_author.lastname}}
+          {%endif%}
+        </p>
+          <p class="story-hero__author"> {{self.author.job_title}} {%if self.co_author%}, {{self.co_author.job_title}}{%endif%}</p>
         </div>
       </div>
       <!-- add image -->

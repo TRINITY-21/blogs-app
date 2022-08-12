@@ -143,9 +143,9 @@
         <div class="filters__filters">
           <!-- Add Secondary Tags for Filtering -->
           {% for tags in page.get_tags %}
-          <div class="filters__filter">
+          <div class="filters__filter" onclick=checked()>
             <label class="filters__label">
-              <input class="filters__checkbox" type="checkbox" name="{{tags.slug}}" value={{tags.slug}}>{{tags.name}}
+              <input class="filters__checkbox" type="checkbox"  name="{{tags.slug}}" value={{tags.slug}}>{{tags.name}}
             </label>
           </div>
           {% endfor %}
@@ -168,21 +168,23 @@
 
     <!-- Perform checkbox checked operations in js -->
     <script>
-      $(document).on('change', function (e) {
-        let a = $('input:checkbox:checked').map(function () {
-          return $(this).val()
-        }).get()
-        // alert(a)
-        if (a != '') {
-          window.location = `/story-listings/?tags=${a}`
+      function checked() {
+        $(document).on('click', function (e) {
+          let a = $('input:checkbox:checked').map(function () {
+            return $(this).val()
+          }).get()
+          // alert(a)
+          if (a != '') {
+            window.location = `/story-listings/?tags=${a}`
 
-        }
-        else {
-          window.location = `/story-listings/` || {}
+          }
+          else {
+            window.location = `/story-listings/` || {}
 
-        }
+          }
 
-      })
+        })
+      }
     </script>
 
     <!-- add scroll to  bottom on checkbox click -->
@@ -327,7 +329,7 @@
     </section>
     {%endif%}
 
-    {% if '?tags=' in request.get_full_path %}
+    {% if story.paginator.num_pages > 1 and '?tags=' in request.get_full_path%}
     <section class="component pagination">
       <!-- story first page -->
       {% if story.has_other_pages %}
@@ -365,7 +367,9 @@
                 onclick="location.href='{{request.get_full_path}}&page={{ story.paginator.num_pages }}'">>></button>
               {% endif %}
 
-    </section> {%endif%}
+    </section>
+
+    {%endif%}
 
     <!-- Add form functionality -->
 
@@ -373,10 +377,9 @@
   <div class="component__background" role="presentation"></div>
   <div class="component__content">
     <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
-
     {% with self.get_contact_form as form %}
 
-    <form class="form" action="" id="signup-form" action="{% pageurl page %}" method="POST" role="form">
+    <form class="form" id="signup-form" action="{% pageurl page.get_contact_form_page %}" method="POST" role="form">
       {% csrf_token %}
       {% for field in form.visible_fields %}
       <div class="form__input-wrapper form__input--{{ field.field.widget.attrs.field_classname }}">
@@ -385,13 +388,14 @@
         {% if field.field.widget.input_type %}
 
         <input type="{{ field.field.widget.input_type }}" class="form__input" name="{{ field.name }}"
-          id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required%}required="required" {% endif %}>
+          id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required%}required="required"
+          {% endif %}>
         <label class="form__label" for="{{ field.label }}" for="{{ field.id_for_label }}">{{ field.label }}</label>
 
         {% else %}
 
         <textarea type="{{ field.field.widget.input_type }}" class="form__input form__input--textarea"
-          name="{{ field.name }}" id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if  field.field.required %}required="required" {% endif %}></textarea>
+          name="{{ field.name }}" id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required %}required="required" {% endif %}></textarea>
         <div class="form__notice">*optional</div>
 
         {% endif %}

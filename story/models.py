@@ -36,37 +36,15 @@ from .blocks import BodyBlock
 
 
 # Stories Listing page
-class CustomFormBuilder(FormBuilder):
-    def get_create_field_function(self, type):
-        """
-        Override the method to prepare a wrapped function that will call the original
-        function (which returns a field) and update the widget's attrs with a custom
-        value that can be used within the template when rendering each field.
-        """
-
-        create_field_function = super().get_create_field_function(type)
-        # self.fields['name'].widget.attrs.update({'class': 'special'})
-
-        def wrapped_create_field_function(field, options):
-
-            created_field = create_field_function(field, options)
-            created_field.widget.attrs.update(
-             # {"class": field.field_classname} # Important: using the class may be sufficient, depending on how your form is being rendered, try this first.
-             {"field_classname": field.field_classname} # this is a non-standard attribute and will require custom template rendering of your form to work
-            )
-
-            created_field.widget.attrs.update(
-             {"placeholder": field.placeholder}
-            )
-
-            print(created_field)
-
-            return created_field
-
-        return wrapped_create_field_function
-
 class StoryListingsPage(RoutablePageMixin, Page):
+  # not createable in wagtail dashboard
+  subpage_types = [
+          'story.StoryPage',  # subpage can only have story page as a childpage
 
+      ]
+  parent_page_type = [
+          'wagtailcore.Page'  # appname.ModelName
+      ]
   template = "story/story_listings_page.html"
 
   # overwrite context returned to include pagination
@@ -128,14 +106,15 @@ class StoryListingsPage(RoutablePageMixin, Page):
 
 
   def get_contact_form_page(self):
-        form =  ContactUsPage.objects.get(slug='contact-me')
-        print('form', form)
+        form =  ContactUsPage.objects.get(slug='contact-us')
         return form
 
   def get_contact_form(self):
         form = self.get_contact_form_page().get_form()
-        print('formm',form)
         return form
+
+
+
   # route to get all stores with pagination parameters
   @route(r'^$(?:page=(?P<page_num>\d+)/)?')
   def all_stories(self, request,page_num=1, *args, **kwargs):
@@ -156,6 +135,9 @@ class StoryListingsPage(RoutablePageMixin, Page):
 # Story Page Model.
 class StoryPage(Page):
   template = "story/story_page.html"
+  subpage_types = [ ]
+      # No subpage
+  parent_page_type = []
   featured_image = models.ForeignKey(
     "wagtailimages.Image",
     null=True,
@@ -224,53 +206,11 @@ class StoryPage(Page):
   ]
 
   def get_contact_form_page(self):
-        form =  ContactUsPage.objects.get(slug='contact-me')
-         
-        print('formm', form)
+        form =  ContactUsPage.objects.get(slug='contact-us')
         return form
 
   def get_contact_form(self):
         return self.get_contact_form_page().get_form()
-
-  # add form fields for contact us page
-class FormField(AbstractFormField):
-
-    page = ParentalKey("ContactPage", related_name="form_fields", on_delete=models.SET_NULL, null=True)
-
-    # add custom fields to FormField model
-    field_classname = models.CharField("Field classes", max_length=254, blank=True)
-    placeholder = models.CharField("Placeholder", max_length=254, blank=True)
-
-    # revise panels so that the field can be edited in the admin UI
-    panels = AbstractFormField.panels + [
-        FieldPanel("field_classname"),
-        FieldPanel("placeholder"),
-    ]
-
-
-class ContactPage(AbstractEmailForm):
-    form_builder = CustomFormBuilder
-
-    template = "contact/contact_page.html"
-    # This is the default path.
-    # If ignored, Wagtail adds _landing.html to your template name
-    landing_page_template = "contact/contact_page_landing.html"
-
-    intro = RichTextField(blank=True)
-    thank_you_text = RichTextField(blank=True)
-
-    content_panels = AbstractEmailForm.content_panels + [
-        FieldPanel('intro'),
-        InlinePanel('form_fields', label='Form Fields'),
-        FieldPanel('thank_you_text'),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('from_address', classname="col6"),
-                FieldPanel('to_address', classname="col6"),
-            ]),
-            FieldPanel("subject"),
-        ], heading="Email Settings"),
-    ]
 
 
 # Authors Model
@@ -321,6 +261,9 @@ class StoryPageSecondaryTag(TaggedItemBase):
 
   # add story featured page to story listings
 class FeaturedPage(Page):
+    subpage_types = [ ]
+      # No subpage
+    parent_page_type = []
     featured = models.ForeignKey('StoryPage',
             related_name='+',
             on_delete=models.SET_NULL,

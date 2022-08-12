@@ -86,6 +86,10 @@ class FormField(AbstractFormField):
 class ContactUsPage(AbstractEmailForm):
     form_builder = CustomFormBuilder
 
+    subpage_types = []
+
+      # register parent page
+    parent_page_type = []
     # template = "contact_page.html"
     # This is the default path.
     # If ignored, Wagtail adds _landing.html to your template name
@@ -109,4 +113,3 @@ class ContactUsPage(AbstractEmailForm):
 
 
 
- 
