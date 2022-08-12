@@ -270,5 +270,10 @@ class FeaturedPage(Page):
             null=True, blank=True)
 
     content_panels = Page.content_panels + [
-        FieldPanel('featured'),
-    ]
+        MultiFieldPanel(
+      [
+      FieldPanel("featured"),
+      ],
+      heading="Choose Story of impact to display",
+        )]
+         

@@ -41,8 +41,6 @@ class HomePage(Page):
   subpage_types = [
           'story.StoryListingsPage',
           'home.FaqsPage',
-          'story.FeaturedPage',
-          'contact.ContactUsPage',
 
       ]
 
