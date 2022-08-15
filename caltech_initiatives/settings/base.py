@@ -31,6 +31,12 @@ INSTALLED_APPS = [
     'search',
     'contact',
 
+    # external apps
+    'wagtailsvg',
+    'wagtail.contrib.modeladmin',
+    'generic_chooser',
+
+    
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -155,7 +161,7 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-
+WAGTAILSVG_UPLOAD_FOLDER = 'svg'
 
 # Wagtail settings
 
