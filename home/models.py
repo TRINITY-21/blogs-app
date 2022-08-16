@@ -52,6 +52,7 @@ class HomePage(Page):
           'home.ProgressAmount',
           'home.ShortStory',
           'home.SVGPage',
+          'home.PillarsPage',
 ]
 
       # register parent page
@@ -88,10 +89,13 @@ class HomePage(Page):
   # get short story available to home
   def get_svg(self):
     svg = SVGs.objects.all()
-    print(svg, 'gogogog')
     return svg
-
-
+    
+  # get all pillars
+  def get_all_pillars(self):
+    pillars = PillarPage.objects.all()
+    print(pillars, 'pillars')
+    return pillars
 class StoriesOfImpactHomePage(Page):
     subpage_types = [ ]
       # No subpage
@@ -158,15 +162,10 @@ class ProgressAmount(Page):
 
         ]
 
-
 # svg section data
-
 class SVGPage(RoutablePageMixin, Page):
   subpage_types = ['home.SVGs']
   parent_page_type = []
-
-
-
 
 class SVGs(Page):
   subpage_types = []
@@ -211,7 +210,7 @@ class ShortStory(Page):
   ImageChooserPanel("desktop_image"),
   ]
 
-# FAQ Page Model.
+# FAQs Page Model.
 class FaqsPage(RoutablePageMixin, Page):
   subpage_types = ['home.FaqPage',]
 
@@ -230,8 +229,7 @@ class FaqsPage(RoutablePageMixin, Page):
   def faqs(self):
     all_faq = FaqPage.objects.descendant_of(self).live().order_by('-first_published_at')
     return all_faq
-
-
+# Faq pagge
 class FaqPage(Page):
   template = "home/faq_page.html"
   subpage_types = []
@@ -252,6 +250,46 @@ class FaqPage(Page):
 
   ]
 
+# Pillars Page
+class PillarsPage(RoutablePageMixin, Page):
+  subpage_types = ['home.PillarPage']
+  parent_page_type = []
+
+  pass
+
+# Pillar Page
+class PillarPage(Page):
+  subpage_types = []
+  parent_page_type = []
+  featured_image = models.ForeignKey(
+    "wagtailimages.Image",
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL,
+    related_name="+",
+    )
+  body = StreamField(BodyBlock(),null=True,blank=True,)
+  summary = models.CharField(
+    max_length=100,
+    null=True,
+    blank=True,
+    help_text='Overwrites the default title',
+  )
+
+  sub_heading = models.CharField(
+    max_length=100,
+    null=True,
+    blank=True,
+    help_text='Overwrites the default title',
+  )
+
+
+  content_panels =  Page.content_panels + [
+  FieldPanel("sub_heading"),
+  FieldPanel("summary"),
+  ImageChooserPanel("featured_image"),
+  StreamFieldPanel("body"),
+  ]
 
 
 

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static%}
-{% load wagtailcore_tags wagtailimages_tags%}
+{% load concat_strings %}
 
+{% load wagtailcore_tags wagtailimages_tags%}
 {% block body_class %}{{page.title}}{% endblock %}
 
 {% block content %}
@@ -106,164 +107,53 @@
         {%endif%}
       </div>
     </section>
+
+    <!-- add pillars page  -->
+    {% if self.get_all_pillars %}
     <section class="component tab-slider">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
         <div class="tab-slider__cards js-tab-slider">
-          <div class="tab-slider__card is-active">
+          {% for pillar in self.get_all_pillars %}
+          {% with pillar=pillar.specific %}
+          {% image pillar.featured_image original as banner %}
+
+          <div class="tab-slider__card {% if pillar %}is-active {%endif%}">
             <button class="tab-slider__card-label">
               <div class="tab-slider__card-icon" role="presentation">
                 <svg>
                   <use xlink:href="#scholarship"></use>
                 </svg>
               </div>
-              <h1 class="tab-slider__card-headline">Undergraduate <br>Scholarships</h1>
+              <h1 class="tab-slider__card-headline">{{pillar.title}}</h1>
               <p class="tab-slider__card-stats">$XXX,XXX raised<br>XX% to goal</p>
             </button>
             <div class="tab-slider__card-content">
               <div class="tab-slider__card-image-wrap">
-                <div class="tab-slider__card-image"><img src="{% static 'assets/fpo-tab-slider-card-1.jpg' %}"
-                    alt="Students studying">
+                <div class="tab-slider__card-image"><img src="{{banner.url}}" alt="Students studying">
                 </div>
               </div>
               <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">Undergrad Scholarships:</h2>
-                <p>Relm dolor sit amet, consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet
-                  mi augue vestibulum mauris ante faucibus. Lorem phasellus. Lorem ipsum dolor sit amet, consect.</p>
-                <p>Dolor sit amet, consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi
-                  augue vestibulum mauris ante faucibus.</p>
-                <p>Sit amet, consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi augue
-                  vestibulum mauris ante faucibus.</p>
+                <h2 class="tab-slider__card-subhead">{{pillar.title}}:</h2>
+                <p>{{pillar.summary}}</p>
+                <!-- "http://localhost:8080/webtop/drl/objectId/'"+object_id+"' -->
                 <ul>
-                  <li><a href="">More information</a></li>
-                  <li><a href="">Stories about Undergrad Scholarships</a></li>
+                  <li><a href="{% pageurl pillar %}">More information</a></li>
+
+                  <li><a href="/story-listings/?tags=">Stories about {{pillar.title}}</a></li>
                   <li><a href="">Give now</a></li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="tab-slider__card">
-            <button class="tab-slider__card-label">
-              <div class="tab-slider__card-icon" role="presentation">
-                <svg>
-                  <use xlink:href="#fellowships"></use>
-                </svg>
-              </div>
-              <h1 class="tab-slider__card-headline">Graduate <br>Fellowships</h1>
-              <p class="tab-slider__card-stats">$XXX,XXX raised<br>XX% to goal</p>
-            </button>
-            <div class="tab-slider__card-content">
-              <div class="tab-slider__card-image-wrap">
-                <div class="tab-slider__card-image"><img src="{% static 'assets/fpo-tab-slider-card-2.jpg' %}"
-                    alt="Students studying">
-                </div>
-              </div>
-              <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">Graduate Fellowships:</h2>
-                <p>Amet, consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi augue
-                  vestibulum mauris ante faucibus. Lorem phasellus. Lorem ipsum dolor sit amet, consect.</p>
-                <p>Sit amet, consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi augue
-                  vestibulum mauris ante faucibus.</p>
-                <ul>
-                  <li><a href="">More information</a></li>
-                  <li><a href="">Stories about Graduate Fellowships</a></li>
-                  <li><a href="">Give now</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="tab-slider__card">
-            <button class="tab-slider__card-label">
-              <div class="tab-slider__card-icon" role="presentation">
-                <svg>
-                  <use xlink:href="#health"></use>
-                </svg>
-              </div>
-              <h1 class="tab-slider__card-headline">Health & <br>Wellness</h1>
-              <p class="tab-slider__card-stats">$XXX,XXX raised<br>XX% to goal</p>
-            </button>
-            <div class="tab-slider__card-content">
-              <div class="tab-slider__card-image-wrap">
-                <div class="tab-slider__card-image"><img src="{% static 'assets/fpo-tab-slider-card-3.jpg' %}"
-                    alt="Students studying">
-                </div>
-              </div>
-              <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">Health & Wellness:</h2>
-                <p>Sit amet, consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi augue
-                  vestibulum mauris ante faucibus. Lorem phasellus. Lorem ipsum dolor sit amet, consect.</p>
-                <p>Consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi augue vestibulum
-                  mauris ante faucibus.</p>
-                <ul>
-                  <li><a href="">More information</a></li>
-                  <li><a href="">Stories about Health & Wellness</a></li>
-                  <li><a href="">Give now</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="tab-slider__card">
-            <button class="tab-slider__card-label">
-              <div class="tab-slider__card-icon" role="presentation">
-                <svg>
-                  <use xlink:href="#career"></use>
-                </svg>
-              </div>
-              <h1 class="tab-slider__card-headline">Career <br>Advising</h1>
-              <p class="tab-slider__card-stats">$XXX,XXX raised<br>XX% to goal</p>
-            </button>
-            <div class="tab-slider__card-content">
-              <div class="tab-slider__card-image-wrap">
-                <div class="tab-slider__card-image"><img src="{% static 'assets/fpo-tab-slider-card-4.jpg' %}"
-                    alt="Students studying">
-                </div>
-              </div>
-              <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">Career Advising:</h2>
-                <p>Netus ornare maecenas sit diam. Ut magnis aliquet mi augue vestibulum mauris ante faucibus. Lorem
-                  phasellus. Lorem ipsum dolor sit amet, consect.</p>
-                <p>Ornare maecenas sit diam. Ut magnis aliquet mi augue vestibulum mauris ante faucibus.</p>
-                <ul>
-                  <li><a href="">More information</a></li>
-                  <li><a href="">Stories about Career Advising</a></li>
-                  <li><a href="">Give now</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="tab-slider__card">
-            <button class="tab-slider__card-label">
-              <div class="tab-slider__card-icon" role="presentation">
-                <svg>
-                  <use xlink:href="#cocurricular"></use>
-                </svg>
-              </div>
-              <h1 class="tab-slider__card-headline">Co-Curricular <br>Experience</h1>
-              <p class="tab-slider__card-stats">$XXX,XXX raised<br>XX% to goal</p>
-            </button>
-            <div class="tab-slider__card-content">
-              <div class="tab-slider__card-image-wrap">
-                <div class="tab-slider__card-image"><img src="{% static 'assets/fpo-tab-slider-card-5.jpg' %}"
-                    alt="Students studying">
-                </div>
-              </div>
-              <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">Co-Curricular Experience:</h2>
-                <p>Consectetur adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi augue vestibulum
-                  mauris ante faucibus. Lorem phasellus. Lorem ipsum dolor sit amet, consect.</p>
-                <p>Adipiscing elit. Netus ornare maecenas sit diam. Ut magnis aliquet mi augue vestibulum mauris ante
-                  faucibus.</p>
-                <ul>
-                  <li><a href="">More information</a></li>
-                  <li><a href="">Stories about Co-Curricular Experience</a></li>
-                  <li><a href="">Give now</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          {%endwith%}
+          {%endfor%}
+
         </div>
       </div>
     </section>
+
+    {%endif%}
 
     {% for st in self.get_short_story %}
     {% with st=st.specific %}
