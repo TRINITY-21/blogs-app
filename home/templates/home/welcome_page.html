@@ -76,37 +76,46 @@
     </div>
   </header>
   <main id="maincontent">
+    <!-- Add page hero  -->
+    {% if page.get_funds %}
+    {% for funds in page.get_funds %}
+
     <section class="component progress-hero">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
         <div class="progress-hero__content">
           <div class="progress-hero__copy">
-            <h1 class="progress-hero__headline">It takes experience.</h1>
-            <p class="progress-hero__copy">What does it take for the most ambitious and innovative minds to push the
-              limits of what's possible? David and Molly Pyott know. They've established a new fellowship program to
-              bring diverse perspectives to medical engineering.</p><a class="progress-hero__cta" href="#">Learn
-              More</a>
+            <h1 class="progress-hero__headline">{{funds.hero_headline}}</h1>
+            <p class="progress-hero__copy">{{funds.hero_copy}}</p>
+
+            <!-- add cta to home -->
+            {% if heros %}
+            {{heros.cta_hero}}
+            {% endif %}
           </div>
         </div>
-
-        {% if page.get_funds %}
-        {% for funds in page.get_funds %}
-        {% if funds.percentage > 40 %}
+          {% if funds.show_progress_bar == 'Yes'%}
         <div class="progress-cta js-trigger">
           <div class="progress-cta__progress">
             <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of ${{funds.initial_amt}}
               funded</p>
             <p class="progress-cta__funded-percent">{{funds.percentage}}%</p>
-            <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation"></div><a
-              class="progress-cta__cta" href="#">Make a Gift</a>
+            <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation"></div>
+            <!--
+            {% if heros %}
+              {{heros.progress_cta}}
+            {% endif %} -->
+
+
           </div>
         </div>
-        {%endif%}
 
-        {%endfor%}
-        {%endif%}
+          {%endif%}
+
       </div>
     </section>
+    {%endfor%}
+    {%endif%}
 
     <!-- add pillars page  -->
     {% if self.get_all_pillars %}

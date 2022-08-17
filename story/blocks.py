@@ -67,3 +67,18 @@ class CTABlock(blocks.StructBlock):
         template = "home/cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
+
+
+from wagtail.images.blocks import ImageChooserBlock
+
+
+class HeroCTABlock(blocks.StructBlock):
+    """A simple call to action section."""
+    button_page = blocks.PageChooserBlock(required=False)
+    button_url = blocks.URLBlock(required=False)
+    button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
+
+    class Meta:  # noqa
+        template = "home/hero_cta_block.html"
+        icon = "placeholder"
+        label = "Call to Action"

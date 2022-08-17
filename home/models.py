@@ -32,7 +32,7 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
 from contact.models import ContactUsPage
-from story.blocks import BodyBlock, CTABlock
+from story.blocks import BodyBlock, CTABlock, HeroCTABlock
 from story.models import StoryPage
 from wagtailsvg.models import Svg
 from wagtailsvg.blocks import SvgChooserBlock
@@ -51,7 +51,7 @@ class HomePage(Page):
           'home.StoriesOfImpactHomePage',
           'home.ProgressAmount',
           'home.ShortStory',
-          'home.SVGPage',
+          'home.CTACards',
           'home.PillarsPage',
 ]
 
@@ -75,10 +75,18 @@ class HomePage(Page):
       context['fp_info2'] = fp_info2
       context['fp_info3'] = fp_info3
 
+    funds = ProgressAmount.objects.all()
+    for hero in funds:
+      print(hero.progress_cta,'fundss')
+      print(hero.cta_hero,'fundss')
+      context['heros'] = hero
+    print(context['heros'].progress_cta,'playyy')
     return context
   # get all funds available to home
   def get_funds(self):
     funds = ProgressAmount.objects.all()
+    for hero in funds:
+      pass
     return funds
 
   # get short story available to home
@@ -90,11 +98,10 @@ class HomePage(Page):
   def get_svg(self):
     svg = SVGs.objects.all()
     return svg
-    
   # get all pillars
   def get_all_pillars(self):
     pillars = PillarPage.objects.all()
-    print(pillars, 'pillars')
+    # print(pillars, 'pillars')
     return pillars
 class StoriesOfImpactHomePage(Page):
     subpage_types = [ ]
@@ -139,10 +146,43 @@ class StoriesOfImpactHomePage(Page):
 class ProgressAmount(Page):
   subpage_types = []
   parent_page_type = []
+  hero_headline = models.CharField(max_length=100, null=True, blank=True)
+  hero_copy = StreamField(BodyBlock(), null=True, blank=True)
+  cta_hero = StreamField(
+        [
+            ("cta", HeroCTABlock()),
+        ],
+        null=True,
+        blank=True,
+    )
+  progress_cta = StreamField(
+        [
+            ("cta", HeroCTABlock()),
+        ],
+        null=True,
+        blank=True,
+    )
   initial_amt = models.IntegerField(null=True, blank=True, default=0)
   final_amt = models.IntegerField(null=True, blank=True, default=0)
   percentage = models.IntegerField( null=True, default=0, blank=True)
+  show_progress_bar = models.CharField(
+    max_length=10,
+    blank=True,
+    null=True,
+    choices=[
+      ('Yes','Yes'),
+      ('No', 'No'),
+    ]
+  )
+
   content_panels = Page.content_panels + [
+    FieldPanel('hero_headline'),
+        MultiFieldPanel(
+      [
+      StreamFieldPanel("hero_copy"),
+      ],
+      heading="Enter Hero Copy",
+        ),
         MultiFieldPanel(
       [
       FieldPanel("initial_amt"),
@@ -153,17 +193,34 @@ class ProgressAmount(Page):
       FieldPanel("final_amt"),
       ],
       heading="Enter Final Amount of funds on home page ",
-        ),        MultiFieldPanel(
+        ),
+        MultiFieldPanel(
       [
       FieldPanel("percentage"),
       ],
       heading="Enter Percentage on home page ",
         ),
 
+      MultiFieldPanel(
+      [
+      StreamFieldPanel("cta_hero"),
+      ],
+      heading="Enter CTA on home page ",
+        ),
+
+         MultiFieldPanel(
+      [
+      StreamFieldPanel("progress_cta"),
+      ],
+      heading="Enter Progress CTA on home page ",
+        ),
+
+        FieldPanel('show_progress_bar')
+
         ]
 
 # svg section data
-class SVGPage(RoutablePageMixin, Page):
+class CTACards(RoutablePageMixin, Page):
   subpage_types = ['home.SVGs']
   parent_page_type = []
 
