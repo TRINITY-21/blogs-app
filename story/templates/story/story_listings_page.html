@@ -94,7 +94,7 @@
       <button class="site-header__menu-toggle js-nav-toggle" aria-label="Toggle Menu Visibility"><span></span></button>
       <nav class="site-header__nav" role="navigation" aria-label="Primary Navigation">
         <ul class="site-header__nav-list">
-          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/story-listings">Stories of
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/">Stories of
               Impact</a>
           </li>
           <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/faq">About the
@@ -176,11 +176,9 @@
           // alert(a)
           if (a != '') {
             window.location = `/story-listings/?tags=${a}`
-
           }
           else {
             window.location = `/story-listings/` || {}
-
           }
 
         })
@@ -256,10 +254,14 @@
               localStorage.CBState = JSON.stringify(cbstate);
             });
           }
+
         });
       })();
     </script>
+
     </div>
+
+
 
 
     <section class="component teaser-list">

@@ -44,7 +44,7 @@ from wagtail.embeds.blocks import EmbedBlock
 
 
 
-class HomePage(Page):
+class HomePage(RoutablePageMixin,Page):
   # subpages home page can create
   subpage_types = [
           'story.StoryListingsPage',
@@ -94,6 +94,7 @@ class HomePage(Page):
       context['cards'] = card
 
     return context
+
   # get all funds available to home
   def get_funds(self):
     funds = ProgressHero.objects.all()
@@ -118,8 +119,12 @@ class HomePage(Page):
   # get all pillars
   def get_all_pillars(self):
     pillars = PillarPage.objects.all()
-    # print(pillars, 'pillars')
+    print(pillars, 'pillars')
     return pillars
+
+
+
+
 class CardsCTA(Page):
     subpage_types = [ ]
       # No subpage
@@ -285,6 +290,7 @@ class SVGs(Page):
         SvgChooserPanel('svg_image'),
     ]
 
+#stas page model
 class StatsPage(Page):
   subpage_types = []
   parent_page_type = []
@@ -316,7 +322,7 @@ class StatsPage(Page):
     ]
 
 
-# middle section data
+# image cta section model
 class ImageCTA(Page):
   subpage_types = [ ]
   parent_page_type = []
@@ -391,16 +397,27 @@ class FaqPage(Page):
 class PillarsPage(RoutablePageMixin, Page):
   subpage_types = ['home.PillarPage']
   parent_page_type = []
+  template = 'home/pillar_page.html'
 
-  pass
+  def get_context(self, request, *args, **kwargs):
+    context = super().get_context(request, *args, **kwargs)
+
+    return context
+
+  @route(r"^pillars/(?P<pillar_tag>[-\w]+)/$", name="stories_by_pillars")
+  def stories_by_tag(self, request, pillar_tag, *args, **kwargs):
+    self.posts = PillarPage.objects.filter(title=pillar_tag)
+    print(self.posts, 'pillllll')
+    return self.serve(request)
+
 
 # Pillar Page
-class PillarPage(Page):
+class PillarPage(RoutablePageMixin,Page):
   subpage_types = []
   parent_page_type = []
 
-  dollars_raised = models.CharField(max_length=100, null=True, blank=True)
-  percent_to_goal = models.CharField(max_length=100, null=True, blank=True)
+  dollars_raised = models.CharField(max_length=100, default=0, null=True, blank=True)
+  percent_to_goal = models.CharField(max_length=100, default=0,  null=True, blank=True)
   featured_image = models.ForeignKey(
     "wagtailimages.Image",
     null=True,
@@ -434,5 +451,10 @@ class PillarPage(Page):
   StreamFieldPanel("body"),
   ]
 
+
+  def get_latest_pillars(self):
+    pillars = PillarPage.objects.all()
+    print(pillars, 'pillars')
+    return pillars
 
 

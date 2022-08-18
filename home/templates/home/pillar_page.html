@@ -1,1 +1,238 @@
-<h1>Pillars page </h1>
+{% extends "base.html" %}
+{% load static%}
+{% load concat_strings %}
+
+{% load wagtailcore_tags wagtailimages_tags%}
+{% block body_class %}{{page.title}}{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CalTech Initiative for Students</title>
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<style>
+  .responsive-object {
+    position: relative;
+  }
+
+  .responsive-object iframe,
+  .responsive-object object,
+  .responsive-object embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<body class="page-type-story-page">
+  <div class="icon-sprite" role="presentation">
+    <?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
+      <symbol viewBox="0 0 90 90" id="career" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M58.7 40.3c0 .3-.1.6-.3.8-.2.2-.5.3-.8.3h-4.3c-.3 0-.6-.1-.8-.3-.2-.2-.3-.5-.3-.8 0-.3.1-.6.3-.8.2-.2.5-.3.8-.3h1.1v-6.5h-1.1c-.3 0-.6-.1-.8-.3-.2-.2-.3-.5-.3-.8s.1-.6.3-.8c.2-.2.5-.3.8-.3h2.2c.3 0 .6.1.8.3.2.2.3.4.3.7v7.7h1.1c.3 0 .6.1.8.3.1.3.2.5.2.8zm-4.8-13c0-.9.7-1.6 1.6-1.6s1.6.7 1.6 1.6c0 .9-.7 1.6-1.6 1.6s-1.6-.7-1.6-1.6zm15.9-5.5H39.9v16.4c1.9 1.7 3 4.3 3 7.2v.6h6.4v6l6.4-6h14.1V21.8zM39.6 50.7c1.2-1.4 1.9-3.3 1.9-5.3 0-4.2-3-7.7-6.7-7.7s-6.7 3.5-6.7 7.7c0 2.1.7 4 1.9 5.3-5.5 2.3-9.2 7.6-9.2 11.3 0 1.2.5 3 3 4.3 2.5 1.3 6 1.8 11 1.8s8.7-.6 11-1.8c2.5-1.3 3-3.1 3-4.3 0-3.8-3.6-9-9.2-11.3z" />
+      </symbol>
+      <symbol id="close-x" viewBox="0 0 16 16" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .bst0 {
+            fill-rule: evenodd;
+            clip-rule: evenodd
+          }
+        </style>
+        <path class="bst0"
+          d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14.2c-3.4 0-6.2-2.8-6.2-6.2 0-3.4 2.8-6.2 6.2-6.2s6.2 2.8 6.2 6.2c0 3.4-2.8 6.2-6.2 6.2z" />
+        <path class="bst0"
+          d="M11 5c-.3-.3-.9-.3-1.3 0L8 6.7 6.3 5c-.4-.3-1-.3-1.3 0-.3.3-.3.9 0 1.3L6.7 8 5 9.7c-.3.3-.3.9 0 1.3.3.3.9.3 1.3 0L8 9.3 9.7 11c.3.3.9.3 1.3 0 .3-.3.3-.9 0-1.3L9.3 8 11 6.3c.3-.4.3-1 0-1.3z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="cocurricular" xmlns="http://www.w3.org/2000/svg">
+        <path d="M45 18.7l8 16.2 17.9 2.6-13 12.7L61 68l-16-8.4L29 68l3.1-17.8-13-12.6L37 34.9l8-16.2z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="fellowships" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M39 59.7c-1.2 0-2.2 1-2.2 2.2s1 2.2 2.2 2.2h12c1.2 0 2.2-1 2.2-2.2s-1-2.2-2.2-2.2H39zm11.4-1.5v-2.5c0-1.7.9-3.3 2.4-4.1 7.5-4.1 10.3-13.5 6.2-21-2.7-5-7.9-8.1-13.6-8.1h-.7c-8.6 0-15.5 6.9-15.5 15.5 0 5.7 3.1 10.9 8.1 13.6 1.5.8 2.4 2.4 2.4 4.1v2.5h4.6v-9L39 43.4c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l5 5.4 5-5.4c.3-.3.7-.3 1 0 .3.3.3.8 0 1.1l-5.2 5.7v9h4.5zm-1.2 7.5c0 2.3-1.9 4.2-4.2 4.2s-4.2-1.9-4.2-4.2h8.4zM66 39.9h5v2h-5zm-3.969 9.203l1-1.732 4.763 2.75-1 1.732zm1.216-17.584l4.763-2.752 1 1.732-4.763 2.751zM19 39.9h5v2h-5zm3.248 10.2l4.677-2.7 1 1.733-4.677 2.699zm-1.309-19.53l1-1.731 4.763 2.75-1 1.732z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="health" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M70.7 33.6c-.7-1.7-1.8-3.3-3.1-4.7-1.3-1.3-2.9-2.4-4.7-3.1-1.7-.7-3.6-1.1-5.5-1.1-4.5 0-9.6 2.1-12.3 5.3-2.7-3.2-7.8-5.3-12.4-5.3-3.8 0-7.5 1.5-10.2 4.2-2.7 2.7-4.2 6.4-4.2 10.2 0 13.5 22.3 27.5 26.2 29.9.2.1.4.2.6.2.2 0 .4-.1.6-.2 3.9-2.3 26.2-16.3 26.2-29.9-.1-1.8-.5-3.7-1.2-5.5zM53.5 49h-5.2v5.2h-6.6V49h-5.2v-6.6h5.2v-5.2h6.6v5.2h5.2V49z" />
+      </symbol>
+      <symbol viewBox="0 0 90 90" id="scholarship" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M45.6 41.7c5.1-.1 10.1.6 15 2.2V36c-3.6-1.5-9.1-2.4-15-2.4s-11.4.9-14.9 2.4v7.9c4.8-1.6 9.9-2.3 14.9-2.2z" />
+        <path
+          d="M75.8 30.1L45.7 21l-30.1 9.1L29.2 35c10.6-4 22.3-4 33 0l5.6-2v8.7h2v-9.4l6-2.2zM46 69.5c6.7 0 12.2-5.5 12.2-12.2 0-6.7-5.5-12.2-12.2-12.2-6.7 0-12.2 5.5-12.2 12.2.1 6.7 5.5 12.2 12.2 12.2z" />
+      </symbol>
+    </svg>
+  </div>
+  <header class="site-header"><a class="site-header__branding" href="/">Initiative for Students | Caltech</a>
+    <div class="site-header__menu">
+      <button class="site-header__menu-toggle js-nav-toggle" aria-label="Toggle Menu Visibility"><span></span></button>
+      <nav class="site-header__nav" role="navigation" aria-label="Primary Navigation">
+        <ul class="site-header__nav-list">
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/story-listings">Stories of Impact</a>
+          </li>
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="/faq">About the Campaign</a>
+          </li>
+          <li class="site-header__nav-list-item"><a class="site-header__nav-list-link" href="tel:646-395-4863">Call
+              (646) 395-4863</a></li>
+        </ul><a class="site-header__nav-list-button" href="#">Make a Gift</a>
+      </nav>
+    </div>
+  </header>
+  <main id="maincontent">
+    <section class="component link-banner">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <div class="link-banner__content"><a class="link-banner__link" href="/">&lt; Back</a></div>
+      </div>
+    </section>
+
+    <!-- add pillars page  -->
+
+    {% image self.featured_image original as banner %}
+    <section class="component story-hero">
+      <div class="story-hero__wrap">
+        <div class="component__background" role="presentation"></div>
+        <div class="component__content">
+          <h1 class="story-hero__title">{{self.title}}</h1>
+          <p class="story-hero__author">${{self.dollars_raised}} raised, {{self.percent_to_goal}}% to goal</p>
+        </div>
+      </div>
+      <div class="story-hero__wrap">
+        <div class="component__background component__background--image" role="presentation"></div>
+        <div class="component__content component__content--image"><img class="story-hero__image" src="{{banner.url}}"
+            alt="Smiling students"></div>
+      </div>
+    </section>
+
+    {% for block in page.body %}
+    <section class="component component--rte rte">
+      {% include_block block %}
+      <a class="button" href="/story-listings">View All Stories</a><a class="button" href="#">Make A Gift Now</a>
+    </section>
+
+    {%endfor%}
+
+
+
+    <section class="component cards-cta js-trigger">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <h1 class="cards-cta__headline">{{self.title}} Stories</h1>
+        <div class="cards-cta__cards js-news-slider"><a class="image-card" href="#">
+            <figure class="image-card__img"><img src="img/fpo-image-card-1.jpg" alt="Alt text"></figure>
+            <div class="image-card__content">
+              <p class="image-card__tags">Co-Curricular Experience</p>
+              <h1 class="image-card__headline">Lorem ipsum dolor sit amet consectetuer adipiscing elit</h1>
+              <p class="image-card__copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Netus ornare maecenas
+                sit diam. Ut magnis aliquet mi augue vestibulum mauris.</p>
+              <div class="image-card__cta">Learn More</div>
+            </div>
+          </a><a class="image-card" href="#">
+            <figure class="image-card__img"><img src="img/fpo-image-card-2.jpg" alt="Alt text"></figure>
+            <div class="image-card__content">
+              <p class="image-card__tags">Graduate Fellowships</p>
+              <h1 class="image-card__headline">Lorem ipsum dolor sit amet</h1>
+              <p class="image-card__copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Netus ornare maecenas
+                sit diam. Ut magnis aliquet mi augue vestibulum mauris.</p>
+              <div class="image-card__cta">Learn More</div>
+            </div>
+          </a><a class="image-card" href="#">
+            <figure class="image-card__img"><img src="img/fpo-image-card-3.jpg" alt="Alt text"></figure>
+            <div class="image-card__content">
+              <p class="image-card__tags">Health & Wellness</p>
+              <h1 class="image-card__headline">Lorem ipsum dolor sit amet consectetuer adipiscing elit</h1>
+              <p class="image-card__copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Netus ornare
+                maecenas.</p>
+              <div class="image-card__cta">Learn More</div>
+            </div>
+          </a></div><a class="cards-cta__cta" href="#">View All Stories</a>
+      </div>
+    </section>
+    <section class="component form-cta">
+      <div class="component__background" role="presentation"></div>
+      <div class="component__content">
+        <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
+        <form class="form" action="" id="signup-form">
+          <div class="form__input-wrapper form__input--firstname">
+            <input class="form__input" type="text" name="firstname" placeholder="First Name" required>
+            <label class="form__label" for="firstname">First Name</label>
+          </div>
+          <div class="form__input-wrapper form__input--lastname">
+            <input class="form__input" type="text" name="lastname" placeholder="Last Name" required>
+            <label class="form__label" for="lastname">Last Name</label>
+          </div>
+          <div class="form__input-wrapper form__input--email">
+            <input class="form__input" type="email" name="email" placeholder="Email" required>
+            <label class="form__label" for="email">Email</label>
+          </div>
+          <div class="form__input-wrapper form__input--message">
+            <textarea class="form__input form__input--textarea" name="message"
+              placeholder="What the Student Experience means to me*"></textarea>
+            <div class="form__notice">*optional</div>
+          </div>
+          <button class="form__input--submit" type="submit" form="signup-form">Submit</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="component site-footer">
+    <div class="component__content">
+      <div class="site-footer__info">
+        <h1 class="site-footer__logo">Caltech</h1>
+        <p class="site-footer__address">California Institute of Technology<br>1200 East California
+          Boulevard<br>Pasadena, California 91125</p>
+        <p class="site-footer__copyright">©2022 California Institute of Technology</p>
+      </div>
+      <h1 class="site-footer__contacts-head">Contact</h1>
+      <div class="site-footer__contacts">
+        <ul class="site-footer__contact-list">
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Undergrad Scholarships</h2><a class="site-footer__contact-email"
+              href="mailto:give.scholarships@caltech.edu">give.scholarships@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Graduate Fellowships</h2><a class="site-footer__contact-email"
+              href="mailto:give.fellowships@caltech.edu">give.fellowships@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Health & Wellness</h2><a class="site-footer__contact-email"
+              href="mailto:give.wellness@caltech.edu">give.wellness@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Career Advising</h2><a class="site-footer__contact-email"
+              href="mailto:give.advising@caltech.edu">give.advising@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">Co-Curricular Experience</h2><a class="site-footer__contact-email"
+              href="mailto:give.experience@caltech.edu">give.experience@caltech.edu</a>
+          </li>
+          <li class="site-footer__contact-item">
+            <h2 class="site-footer__contact-head">General Inquiries</h2><a class="site-footer__contact-email"
+              href="mailto:give@caltech.edu">give@caltech.edu</a><a class="site-footer__contact-email"
+              href="tel:626-395-4863">(626) 395-4863</a>
+          </li>
+        </ul>
+      </div>
+      <nav class="site-footer__nav" role="navigation" aria-label="Secondary Navigation">
+        <ul class="site-footer__nav-list">
+          <li class="site-footer__nav-list-item"><a class="site-footer__nav-list-link" href="#">About the Campaign</a>
+          </li>
+          <li class="site-footer__nav-list-item"><a class="site-footer__nav-list-link" href="#">Make a Gift</a></li>
+          <li class="site-footer__nav-list-item"><a class="site-footer__nav-list-link" href="#">Privacy Statement</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</body>
+<script src="{% static 'js/vendors~mains.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/mains.js' %}" type="text/javascript"></script>
+
+{%endblock%}
