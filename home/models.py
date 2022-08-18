@@ -32,11 +32,12 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
 from contact.models import ContactUsPage
-from story.blocks import BodyBlock, CTABlock, HeroCTABlock
+from story.blocks import BodyBlock, CTABlock, CardsCTABlock, HeroCTABlock, InlineVideoBlock, StatsCTABlock
 from story.models import StoryPage
 from wagtailsvg.models import Svg
 from wagtailsvg.blocks import SvgChooserBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
+from wagtail.embeds.blocks import EmbedBlock
 
 
 
@@ -48,21 +49,23 @@ class HomePage(Page):
   subpage_types = [
           'story.StoryListingsPage',
           'home.FaqsPage',
-          'home.StoriesOfImpactHomePage',
-          'home.ProgressAmount',
-          'home.ShortStory',
-          'home.CTACards',
+          'home.CardsCTA',
+          'home.ProgressHero',
+          'home.ImageCTA',
+          'home.StatsSVG',
           'home.PillarsPage',
+          'home.StatsPage',
 ]
 
       # register parent page
   parent_page_type = ['wagtailcore.Page']
+  template = "home/welcome_page.html"
 
   def get_context(self, request, *args, **kwargs):
     context = super().get_context(request, *args, **kwargs)
     svg = SVGs.objects.all()
     print(svg, 'dvggg')
-    fp = StoriesOfImpactHomePage.objects.all()
+    fp = CardsCTA.objects.all()
     # Get all stories of impact on home page
     for fps in fp:
       fp_info = StoryPage.objects.filter(title=fps.featured_page1)
@@ -75,27 +78,41 @@ class HomePage(Page):
       context['fp_info2'] = fp_info2
       context['fp_info3'] = fp_info3
 
-    funds = ProgressAmount.objects.all()
+    funds = ProgressHero.objects.all()
     for hero in funds:
       print(hero.progress_cta,'fundss')
-      print(hero.cta_hero,'fundss')
       context['heros'] = hero
-    print(context['heros'].progress_cta,'playyy')
+
+    stats = StatsPage.objects.all()
+    for stat in stats:
+      print(stat.stats_cta, 'ctaaaa')
+      context['stat'] = stat
+
+    cards = CardsCTA.objects.all()
+    for card in cards:
+      print(card.cards_cta, 'cardss')
+      context['cards'] = card
+
     return context
   # get all funds available to home
   def get_funds(self):
-    funds = ProgressAmount.objects.all()
+    funds = ProgressHero.objects.all()
     for hero in funds:
       pass
     return funds
 
-  # get short story available to home
-  def get_short_story(self):
-    s_story = ShortStory.objects.all()
+  # get image available to home
+  def get_image_cta(self):
+    s_story = ImageCTA.objects.all()
     return s_story
 
+  # get stats available to home
+  def get_stats(self):
+    stats = StatsPage.objects.all()
+    return stats
+
   # get short story available to home
-  def get_svg(self):
+  def get_svgs(self):
     svg = SVGs.objects.all()
     return svg
   # get all pillars
@@ -103,7 +120,7 @@ class HomePage(Page):
     pillars = PillarPage.objects.all()
     # print(pillars, 'pillars')
     return pillars
-class StoriesOfImpactHomePage(Page):
+class CardsCTA(Page):
     subpage_types = [ ]
       # No subpage
     parent_page_type = []
@@ -121,6 +138,13 @@ class StoriesOfImpactHomePage(Page):
             related_name='featured_page3',
             on_delete=models.SET_NULL,
             null=True, blank=True)
+    cards_cta = StreamField(
+        [
+            ("cta", CardsCTABlock()),
+        ],
+        null=True,
+        blank=True,
+    )
 
     content_panels = Page.content_panels + [
         MultiFieldPanel(
@@ -139,13 +163,28 @@ class StoriesOfImpactHomePage(Page):
       ],
       heading="Choose last Story of impact to display on home page ",
         ),
+        MultiFieldPanel(
+      [
+      StreamFieldPanel("cards_cta"),
+      ],
+      heading="Choose Cards CTA",
+        ),
 
         ]
 
 # Progress amount
-class ProgressAmount(Page):
+class ProgressHero(Page):
   subpage_types = []
   parent_page_type = []
+  background_image = models.ForeignKey(
+    "wagtailimages.Image",
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL,
+    related_name="b_image",
+  )
+
+  video_embed = StreamField([('video', InlineVideoBlock())])
   hero_headline = models.CharField(max_length=100, null=True, blank=True)
   hero_copy = StreamField(BodyBlock(), null=True, blank=True)
   cta_hero = StreamField(
@@ -162,9 +201,9 @@ class ProgressAmount(Page):
         null=True,
         blank=True,
     )
-  initial_amt = models.IntegerField(null=True, blank=True, default=0)
-  final_amt = models.IntegerField(null=True, blank=True, default=0)
-  percentage = models.IntegerField( null=True, default=0, blank=True)
+  initial_amt = models.CharField(max_length=100, null=True, blank=True, default=0)
+  final_amt = models.CharField(max_length=100, null=True, blank=True, default=0)
+  percentage = models.CharField(max_length=100, null=True, blank=True)
   show_progress_bar = models.CharField(
     max_length=10,
     blank=True,
@@ -176,12 +215,19 @@ class ProgressAmount(Page):
   )
 
   content_panels = Page.content_panels + [
+    ImageChooserPanel('background_image'),
     FieldPanel('hero_headline'),
         MultiFieldPanel(
       [
       StreamFieldPanel("hero_copy"),
       ],
       heading="Enter Hero Copy",
+        ),
+        MultiFieldPanel(
+      [
+      StreamFieldPanel("video_embed"),
+      ],
+      heading="Embed video ",
         ),
         MultiFieldPanel(
       [
@@ -220,7 +266,7 @@ class ProgressAmount(Page):
         ]
 
 # svg section data
-class CTACards(RoutablePageMixin, Page):
+class StatsSVG(RoutablePageMixin, Page):
   subpage_types = ['home.SVGs']
   parent_page_type = []
 
@@ -238,11 +284,44 @@ class SVGs(Page):
   content_panels = Page.content_panels + [
         SvgChooserPanel('svg_image'),
     ]
-# middle section data
-class ShortStory(Page):
-  subpage_types = [ ]
-      # No subpage
+
+class StatsPage(Page):
+  subpage_types = []
   parent_page_type = []
+
+  stats_headline = models.CharField(max_length=100, null=True, blank=True)
+  stats_copy = StreamField(BodyBlock(), null=True, blank=True)
+  stats_cta = StreamField(
+        [
+            ("cta", StatsCTABlock()),
+        ],
+        null=True,
+        blank=True,
+    )
+
+  content_panels = Page.content_panels + [
+        FieldPanel('stats_headline'),
+             MultiFieldPanel(
+      [
+      StreamFieldPanel("stats_copy"),
+      ],
+      heading="Enter Stats Copy on home page ",
+        ),
+        MultiFieldPanel(
+      [
+      StreamFieldPanel("stats_cta"),
+      ],
+      heading="Enter Link on home page ",
+        ),
+    ]
+
+
+# middle section data
+class ImageCTA(Page):
+  subpage_types = [ ]
+  parent_page_type = []
+
+  image_cta_headline = models.CharField(max_length=100, null=True, blank=True)
   desktop_image = models.ForeignKey(
     "wagtailimages.Image",
     null=True,
@@ -262,6 +341,7 @@ class ShortStory(Page):
 
 
   content_panels =  Page.content_panels + [
+  FieldPanel("image_cta_headline"),
   StreamFieldPanel("summary"),
   ImageChooserPanel("mobile_image"),
   ImageChooserPanel("desktop_image"),
@@ -318,7 +398,18 @@ class PillarsPage(RoutablePageMixin, Page):
 class PillarPage(Page):
   subpage_types = []
   parent_page_type = []
+
+  dollars_raised = models.CharField(max_length=100, null=True, blank=True)
+  percent_to_goal = models.CharField(max_length=100, null=True, blank=True)
   featured_image = models.ForeignKey(
+    "wagtailimages.Image",
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL,
+    related_name="+",
+    )
+
+  teaser_image = models.ForeignKey(
     "wagtailimages.Image",
     null=True,
     blank=True,
@@ -333,18 +424,13 @@ class PillarPage(Page):
     help_text='Overwrites the default title',
   )
 
-  sub_heading = models.CharField(
-    max_length=100,
-    null=True,
-    blank=True,
-    help_text='Overwrites the default title',
-  )
-
 
   content_panels =  Page.content_panels + [
-  FieldPanel("sub_heading"),
-  FieldPanel("summary"),
+  FieldPanel("dollars_raised"),
+  FieldPanel("percent_to_goal"),
   ImageChooserPanel("featured_image"),
+  ImageChooserPanel("teaser_image"),
+  FieldPanel("summary"),
   StreamFieldPanel("body"),
   ]
 

@@ -94,7 +94,7 @@
             {% endif %}
           </div>
         </div>
-          {% if funds.show_progress_bar == 'Yes'%}
+        {% if funds.show_progress_bar == 'Yes'%}
         <div class="progress-cta js-trigger">
           <div class="progress-cta__progress">
             <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of ${{funds.initial_amt}}
@@ -110,7 +110,7 @@
           </div>
         </div>
 
-          {%endif%}
+        {%endif%}
 
       </div>
     </section>
@@ -164,7 +164,7 @@
 
     {%endif%}
 
-    {% for st in self.get_short_story %}
+    {% for st in self.get_image_cta %}
     {% with st=st.specific %}
     {% image st.mobile_image original as mobile_banner %}
     {% image st.desktop_image original as desktop_banner %}
@@ -178,7 +178,7 @@
       <div class="component__content">
         <div class="image-cta__content">
           <div class="image-cta__content-wrap">
-            <h1 class="image-cta__headline">{{st.title}}</h1>
+            <h1 class="image-cta__headline">{{st.image_cta_headline}}</h1>
             <p class="image-cta__copy">{{st.summary}}</p>
           </div>
         </div>
@@ -193,17 +193,23 @@
     <section class="component stats">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
+
+        {% for stats in self.get_stats %}
+        {% with stats=stats.specific %}
         <div class="stats__info">
-          <h1 class="stats__headline">By the numbers</h1>
-          <p class="stats__copy">Caltech is advancing an environment that unlocks students' greatest capabilities to
-            conduct groundbreaking research and solve the world's most complex problems.</p><a class="stats__cta"
-            href="#">Make an Impact</a>
+          <h1 class="stats__headline">{{stats.stats_headline}}</h1>
+          <p class="stats__copy">{{stats.stats_copy}}</p>
+          {% if stat %}
+          {{stat.stats_cta}}
+          {% endif %}
         </div>
+        {%endwith%}
+        {%endfor%}
 
         <!-- add svg -->
 
         <div class="stats__stats js-stat-slider">
-          {% for svg in self.get_svg %}
+          {% for svg in self.get_svgs %}
           {% with svg=svg.specific %}
           <div class="stats__stat"><img class="stats__stat-graphic" src="{{svg.svg_image.url}}"
               alt="A donut chart displaying 50%">
@@ -217,8 +223,7 @@
 
       </div>
     </section>
-
-    <!-- add Stories of imapact to homepage -->
+    <!-- add cards cta -->
 
     <section class="component cards-cta js-trigger">
       <div class="component__background" role="presentation"></div>
@@ -283,8 +288,11 @@
           {%endwith%}
           {%endfor%}
 
-        </div><a class="cards-cta__cta" href="/story-listings">View All Stories</a>
-      </div>
+        </div>
+            {% if cards %}
+            {{cards.cards_cta}}
+            {% endif %}
+           </div>
     </section>
 
     <section class="component form-cta">

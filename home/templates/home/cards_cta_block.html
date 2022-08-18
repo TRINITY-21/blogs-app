@@ -1,0 +1,7 @@
+{% load wagtailcore_tags %}
+
+{% if self.button_page %}
+<a class="cards-cta__cta" href="{{ self.button_page.url }}">{{ self.button_text }}</a>
+{% elif self.button_url %}
+<a class="cards-cta__cta" href="{{ self.button_url }}">{{ self.button_text }}</a>
+{% endif %}

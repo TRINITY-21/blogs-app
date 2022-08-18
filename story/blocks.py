@@ -21,7 +21,10 @@ from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
-
+from django.utils.translation import gettext_lazy as _
+from wagtail.core import blocks
+from wagtail.core.blocks import CharBlock
+from wagtail.embeds.blocks import EmbedBlock
 
 class CustomImageChooserBlock(ImageChooserBlock):
 	def __init__(self, *args, **kwargs):
@@ -38,6 +41,24 @@ class ImageText(StructBlock):
 	text = RichTextBlock()
 	image = CustomImageChooserBlock(rendition="width-800")
 
+class InlineVideoBlock(StructBlock):
+    video = EmbedBlock(label=_("Video"))
+    caption = CharBlock(required=False, label=_("Caption"))
+    float = blocks.ChoiceBlock(
+        required=False,
+        choices=[('right', _("Right")), ('left', _("Left")), ('center', _("Center"))],
+        default='right',
+        label=_("Float"),
+    )
+    size = blocks.ChoiceBlock(
+        required=False,
+        choices=[('small', _("Small")), ('medium', _("Medium")), ('large', _("Large"))],
+        default='small',
+        label=_("Size"),
+    )
+
+    class Meta:
+        icon = 'media'
 
 class BodyBlock(StreamBlock):
 	h1 = CharBlock()
@@ -80,5 +101,27 @@ class HeroCTABlock(blocks.StructBlock):
 
     class Meta:  # noqa
         template = "home/hero_cta_block.html"
+        icon = "placeholder"
+        label = "Call to Action"
+
+class StatsCTABlock(blocks.StructBlock):
+    """A simple call to action section."""
+    button_page = blocks.PageChooserBlock(required=False)
+    button_url = blocks.URLBlock(required=False)
+    button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
+
+    class Meta:  # noqa
+        template = "home/stats_cta_block.html"
+        icon = "placeholder"
+        label = "Call to Action"
+
+class CardsCTABlock(blocks.StructBlock):
+    """A simple call to action section."""
+    button_page = blocks.PageChooserBlock(required=False)
+    button_url = blocks.URLBlock(required=False)
+    button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
+
+    class Meta:  # noqa
+        template = "home/cards_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
