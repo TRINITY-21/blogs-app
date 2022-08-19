@@ -32,7 +32,7 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
 from contact.models import ContactUsPage
-from story.blocks import BodyBlock, CTABlock, CardsCTABlock, HeroCTABlock, InlineVideoBlock, StatsCTABlock
+from story.blocks import BodyBlock, CTABlock, CardsCTABlock, HeroCTABlock, InlineVideoBlock, PillarsCTABlock, StatsCTABlock
 from story.models import StoryPage
 from wagtailsvg.models import Svg
 from wagtailsvg.blocks import SvgChooserBlock
@@ -63,14 +63,12 @@ class HomePage(RoutablePageMixin,Page):
 
   def get_context(self, request, *args, **kwargs):
     context = super().get_context(request, *args, **kwargs)
-    svg = SVGs.objects.all()
-    print(svg, 'dvggg')
     fp = CardsCTA.objects.all()
     # Get all stories of impact on home page
     for fps in fp:
       fp_info = StoryPage.objects.filter(title=fps.featured_page1)
       for fp in fp_info:
-        print(fp.featured_image)
+       pass
       fp_info2 = StoryPage.objects.filter(title=fps.featured_page2)
       fp_info3 = StoryPage.objects.filter(title=fps.featured_page3)
 
@@ -80,17 +78,17 @@ class HomePage(RoutablePageMixin,Page):
 
     funds = ProgressHero.objects.all()
     for hero in funds:
-      print(hero.progress_cta,'fundss')
+      pass
       context['heros'] = hero
 
     stats = StatsPage.objects.all()
     for stat in stats:
-      print(stat.stats_cta, 'ctaaaa')
+      pass
       context['stat'] = stat
 
     cards = CardsCTA.objects.all()
     for card in cards:
-      print(card.cards_cta, 'cardss')
+      pass
       context['cards'] = card
 
     return context
@@ -119,11 +117,16 @@ class HomePage(RoutablePageMixin,Page):
   # get all pillars
   def get_all_pillars(self):
     pillars = PillarPage.objects.all()
-    print(pillars, 'pillars')
     return pillars
 
 
 
+  @route(r"^pillars/(?P<pillar_tag>[-\w]+)/$", name="stories_by_pillars")
+  def stories_by_tag(self, request, pillar_tag, *args, **kwargs):
+    posts = StoryPage.objects.filter(slug=pillar_tag)
+    print(posts)
+
+    return super(PillarPage, self).serve(request)
 
 class CardsCTA(Page):
     subpage_types = [ ]
@@ -399,16 +402,6 @@ class PillarsPage(RoutablePageMixin, Page):
   parent_page_type = []
   template = 'home/pillar_page.html'
 
-  def get_context(self, request, *args, **kwargs):
-    context = super().get_context(request, *args, **kwargs)
-
-    return context
-
-  @route(r"^pillars/(?P<pillar_tag>[-\w]+)/$", name="stories_by_pillars")
-  def stories_by_tag(self, request, pillar_tag, *args, **kwargs):
-    self.posts = PillarPage.objects.filter(title=pillar_tag)
-    print(self.posts, 'pillllll')
-    return self.serve(request)
 
 
 # Pillar Page
@@ -441,6 +434,28 @@ class PillarPage(RoutablePageMixin,Page):
     help_text='Overwrites the default title',
   )
 
+  pillar_featured_page1 = models.ForeignKey(StoryPage,
+          related_name='pillar_featured_page1',
+          on_delete=models.SET_NULL,
+          null=True, blank=True)
+
+  pillar_featured_page2 = models.ForeignKey(StoryPage,
+          related_name='pillar_featured_page2',
+          on_delete=models.SET_NULL,
+          null=True, blank=True)
+
+  pillar_featured_page3 = models.ForeignKey(StoryPage,
+          related_name='pillar_featured_page3',
+          on_delete=models.SET_NULL,
+          null=True, blank=True)
+  pillars_cta = StreamField(
+      [
+          ("cta", PillarsCTABlock()),
+      ],
+      null=True,
+      blank=True,
+  )
+
 
   content_panels =  Page.content_panels + [
   FieldPanel("dollars_raised"),
@@ -449,7 +464,36 @@ class PillarPage(RoutablePageMixin,Page):
   ImageChooserPanel("teaser_image"),
   FieldPanel("summary"),
   StreamFieldPanel("body"),
+  MultiFieldPanel(
+      [
+      FieldPanel("pillar_featured_page1"),
+      ],
+      heading="Choose first Story of impact to display on Pillar page ",
+        ),        MultiFieldPanel(
+      [
+      FieldPanel("pillar_featured_page2"),
+      ],
+      heading="Choose second Story of impact to display on Pillar page ",
+        ),        MultiFieldPanel(
+      [
+      FieldPanel("pillar_featured_page3"),
+      ],
+      heading="Choose last Story of impact to display on Pillar page ",
+        ),
+        MultiFieldPanel(
+      [
+      StreamFieldPanel("pillars_cta"),
+      ],
+      heading="Choose Pillar CTA",
+        ),
+
   ]
+
+  def get_context(self, request, *args, **kwargs):
+    context = super().get_context(request, *args, **kwargs)
+
+    return context
+
 
 
   def get_latest_pillars(self):
@@ -457,4 +501,10 @@ class PillarPage(RoutablePageMixin,Page):
     print(pillars, 'pillars')
     return pillars
 
+
+
+  def get_pillar(self):
+    pillars = PillarPage.objects.all()
+    print(pillars,'pillars')
+    return pillars
 

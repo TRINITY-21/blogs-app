@@ -125,3 +125,14 @@ class CardsCTABlock(blocks.StructBlock):
         template = "home/cards_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
+
+class PillarsCTABlock(blocks.StructBlock):
+    """A simple call to action section."""
+    button_page = blocks.PageChooserBlock(required=False)
+    button_url = blocks.URLBlock(required=False)
+    button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
+
+    class Meta:  # noqa
+        template = "home/pillars_cta_block.html"
+        icon = "placeholder"
+        label = "Call to Action"

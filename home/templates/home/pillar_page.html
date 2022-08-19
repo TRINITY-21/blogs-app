@@ -119,7 +119,7 @@
 
     {%endfor%}
 
-
+    {% for pillar in self.get_pillar %}
 
     <section class="component cards-cta js-trigger">
       <div class="component__background" role="presentation"></div>
@@ -155,6 +155,9 @@
           </a></div><a class="cards-cta__cta" href="#">View All Stories</a>
       </div>
     </section>
+
+    {%endfor%}
+
     <section class="component form-cta">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
