@@ -259,10 +259,32 @@
       })();
     </script>
 
+
+
+
     </div>
 
 
+        <script>
+                 $(document).ready( function () {
+                      // Get the current state from localstorage
+                      // State is stored as a JSON string
+                      // cbstate = JSON.parse(localStorage['CBState'] || '{}');
+                  cbstate = JSON.parse(localStorage['CBState'] || '{}');
 
+                  let location = window.location.href;
+                  let tags = location.slice(43)
+                  // alert(tag)
+                  // let tag = JSON.parse(tags)
+                   cbstate[tags] = true;
+                   localStorage.CBState = JSON.stringify(cbstate);
+
+                  // let CBState = { tags: true };
+                  // Put the object into storage
+                  // localStorage.setItem('CBState', JSON.stringify(CBState));
+                  })
+
+        </script>
 
     <section class="component teaser-list">
       <div class="component__background" role="presentation"></div>
