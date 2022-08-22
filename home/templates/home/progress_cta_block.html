@@ -1,0 +1,6 @@
+
+{% if self.button_page %}
+<a class="progress-cta__cta" href="{{ self.button_page.url }}">{{ self.button_text }}</a>
+{% elif self.button_url %}
+<a class="progress-cta__cta" href="{{ self.button_url }}">{{ self.button_text }}</a>
+{% endif %}

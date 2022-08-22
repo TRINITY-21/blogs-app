@@ -32,13 +32,14 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page, Site
 from contact.models import ContactUsPage
-from story.blocks import BodyBlock, CTABlock, CardsCTABlock, HeroCTABlock, InlineVideoBlock, PillarsCTABlock, StatsCTABlock
+from story.blocks import BodyBlock, CTABlock, CardsCTABlock, HeroCTABlock, InlineVideoBlock, PillarsCTABlock, ProgressCTABlock, StatsCTABlock
 from story.models import StoryPage
 from wagtailsvg.models import Svg
 from wagtailsvg.blocks import SvgChooserBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtail.embeds.blocks import EmbedBlock
 from pillars.models import PillarPages
+from django import forms
 
 
 
@@ -76,7 +77,7 @@ class HomePage(RoutablePageMixin,Page):
 
     funds = ProgressHero.objects.all()
     for hero in funds:
-      pass
+      print(hero.cta_hero,'jrii')
       context['heros'] = hero
 
     stats = StatsPage.objects.all()
@@ -84,7 +85,7 @@ class HomePage(RoutablePageMixin,Page):
       pass
       context['stat'] = stat
 
-    cards = CardsCTA.objects.all()
+    cards = CardsCTA.objects.all() 
     for card in cards:
       pass
       context['cards'] = card
@@ -115,7 +116,6 @@ class HomePage(RoutablePageMixin,Page):
   # get all pillars
   def get_all_pillars(self):
     pillars = PillarPages.objects.all()
-    print(pillars,'pilla')
     return pillars
 
 class CardsCTA(Page):
@@ -170,6 +170,10 @@ class CardsCTA(Page):
 
         ]
 
+
+CHOICES = [('video','Video'),('image','Image')]
+
+
 # Progress amount
 class ProgressHero(Page):
   subpage_types = []
@@ -182,7 +186,7 @@ class ProgressHero(Page):
     related_name="b_image",
   )
 
-  video_embed = StreamField([('video', InlineVideoBlock())])
+  video_url = models.URLField("Video URL", blank=True)
   hero_headline = models.CharField(max_length=100, null=True, blank=True)
   hero_copy = StreamField(BodyBlock(), null=True, blank=True)
   cta_hero = StreamField(
@@ -194,7 +198,7 @@ class ProgressHero(Page):
     )
   progress_cta = StreamField(
         [
-            ("cta", HeroCTABlock()),
+            ("cta", ProgressCTABlock()),
         ],
         null=True,
         blank=True,
@@ -212,6 +216,9 @@ class ProgressHero(Page):
     ]
   )
 
+
+  show_video_image = models.CharField(max_length=100,null=True,blank=False )
+
   content_panels = Page.content_panels + [
     ImageChooserPanel('background_image'),
     FieldPanel('hero_headline'),
@@ -223,7 +230,7 @@ class ProgressHero(Page):
         ),
         MultiFieldPanel(
       [
-      StreamFieldPanel("video_embed"),
+      StreamFieldPanel("video_url"),
       ],
       heading="Embed video ",
         ),
@@ -259,7 +266,13 @@ class ProgressHero(Page):
       heading="Enter Progress CTA on home page ",
         ),
 
-        FieldPanel('show_progress_bar')
+        FieldPanel('show_progress_bar'),
+          MultiFieldPanel(
+      [
+        FieldPanel('show_video_image', widget=forms.RadioSelect(choices=CHOICES))
+      ],
+      heading="Show video or background image on home page ",
+        ),
 
         ]
 

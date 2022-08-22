@@ -136,3 +136,14 @@ class PillarsCTABlock(blocks.StructBlock):
         template = "home/pillars_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
+
+class ProgressCTABlock(blocks.StructBlock):
+    """A simple call to action section."""
+    button_page = blocks.PageChooserBlock(required=False)
+    button_url = blocks.URLBlock(required=False)
+    button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
+
+    class Meta:
+        template = "home/progress_cta_block.html"
+        icon = "placeholder"
+        label = "Call to Action"

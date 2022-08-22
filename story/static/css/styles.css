@@ -1905,7 +1905,6 @@ button[data-controls=prev]:disabled {
 
 .progress-hero .component__background {
   background-color: #000f13;
-  background-image: url(../img/background-progress-hero.jpg);
   background-position: calc(100% + 120px) -120px;
   background-repeat: no-repeat;
   background-size: 1400px
@@ -2160,7 +2159,7 @@ button[data-controls=prev]:disabled {
   }
 }
 
-.progress-cta__cta {
+.progress-cta__cta .block-cta {
   transition: all .2s linear;
   font-family: "Ubuntu Mono", monospace;
   font-size: 18px;
@@ -2194,7 +2193,7 @@ button[data-controls=prev]:disabled {
   }
 }
 
-.progress-cta__cta::after {
+.progress-cta__cta .block-cta::after {
   transition: -webkit-transform .2s linear;
   transition: transform .2s linear;
   transition: transform .2s linear, -webkit-transform .2s linear;

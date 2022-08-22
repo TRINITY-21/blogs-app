@@ -14,8 +14,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CalTech Initiative for Students</title>
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
+<style>
+
+</style>
 
 <body class="page-type-home">
   <div class="icon-sprite" role="presentation">
@@ -79,314 +82,338 @@
     <!-- Add page hero  -->
     {% if page.get_funds %}
     {% for funds in page.get_funds %}
+    {% image funds.background_image original as banner %}
 
-    <section class="component progress-hero progress-hero--video">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
-        <div class="progress-hero__content">
-          <div class="progress-hero__copy">
-            <h1 class="progress-hero__headline">{{funds.hero_headline}}</h1>
-            <p class="progress-hero__copy">{{funds.hero_copy}}</p>
+    {% if funds.show_video_image == 'image' %}
+    <section class="component progress-hero">
+      <div class="component__background" style="background-image:url({{ banner.url }})" role="presentation"></div>
+      {%endif%}
 
-            <!-- add cta to home -->
-            {% if heros %}
-            {{heros.cta_hero}}
-            {% endif %}
-          </div>
-          <div class="progress-hero__video">
-            <div class="video-container"><iframe width="560" height="315"
-                src="https://www.youtube.com/embed/C0DPdy98e4c" title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe></div>
-          </div>
-        </div>
-        {% if funds.show_progress_bar == 'Yes'%}
-        <div class="progress-cta js-trigger">
-          <div class="progress-cta__progress">
-            <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of ${{funds.initial_amt}}
-              funded</p>
-            <p class="progress-cta__funded-percent">{{funds.percentage}}%</p>
-            <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation"></div>
-          </div>
-          {% if heros %}
-          {{heros.progress_cta}}
-          {% endif %}
-        </div>
+      {% if funds.show_video_image == 'video' %}
+      <section class="component progress-hero progress-hero--video">
+        <div class="component__background" style="background-image:url(/static/img/background-progress-hero-video.jpg)"
+          role="presentation"></div>
         {%endif%}
+        <div class="component__content">
+          <div class="progress-hero__content">
+            <div class="progress-hero__copy">
+              <h1 class="progress-hero__headline">{{funds.hero_headline}}</h1>
+              <p class="progress-hero__copy">{{funds.hero_copy}}</p>
 
-      </div>
-    </section>
-    {%endfor%}
-    {%endif%}
+              <!-- add cta to home -->
+              {% if heros %}
+              {{heros.cta_hero}}
+              {% endif %}
+            </div>
+            {% if funds.show_video_image == 'video' %}
+            <div class="progress-hero__video">
+              {% if funds.video_url %}
+              <div class="video-container">
+                <!-- <iframe width="560" height="315"
+                                  src="{{ funds.video_url  }}" title="YouTube video player" frameborder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen>
 
-    <!-- add pillars page  -->
-    {% if self.get_all_pillars %}
-    <section class="component tab-slider">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
-        <div class="tab-slider__headline">What Your Gift Supports</div>
-        <div class="tab-slider__copy" aria-hidden="true">Swipe to see our giving priorities.</div>
-        <div class="tab-slider__cards js-tab-slider">
-          {% for pillar in self.get_all_pillars %}
-          {% with pillar=pillar.specific %}
-          {% image pillar.featured_image original as banner %}
+                                </iframe> -->
 
-          <div class="tab-slider__card {% if pillar %}is-active {%endif%}">
-            <button class="tab-slider__card-label">
-              <div class="tab-slider__card-icon" role="presentation">
-                <svg>
-                  <use xlink:href="#{{ pillar.slug }}"></use>
-                </svg>
+                {% embed funds.video_url %}
               </div>
-              <h1 class="tab-slider__card-headline">{{pillar.title}}</h1>
-              {% if pillar.show_dollars_bar == 'Yes' %}
-              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{ pillar.percent_to_goal }}% to goal
-              </p>
               {%endif%}
-              <p class="tab-slider__card-indicator" role="presentation">
-                <span></span><span></span><span></span><span></span><span></span>
-              </p>
-            </button>
-            <div class="tab-slider__card-content">
-              <div class="tab-slider__card-image-wrap">
-                <div class="tab-slider__card-image"><img src="{{banner.url}}" alt="Students studying">
+
+            </div>
+            {%endif%}
+          </div>
+          {% if funds.show_progress_bar == 'Yes'%}
+          <div class="progress-cta js-trigger">
+            <div class="progress-cta__progress">
+              <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of ${{funds.initial_amt}}
+                funded</p>
+              <p class="progress-cta__funded-percent">{{funds.percentage}}%</p>
+
+              <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation">
+              </div>
+              <a class="progress-cta__cta" href="#">mkmkkkk</a>
+
+              {% if heros %}
+              {{heros.progress_cta}}
+              {% endif %}
+            </div>
+          </div>
+          {%endif%}
+        </div>
+      </section>
+      {%endfor%}
+      {%endif%}
+
+
+      <!-- add pillars page  -->
+      {% if self.get_all_pillars %}
+      <section class="component tab-slider">
+        <div class="component__background" role="presentation"></div>
+        <div class="component__content">
+          <div class="tab-slider__headline">What Your Gift Supports</div>
+          <div class="tab-slider__copy" aria-hidden="true">Swipe to see our giving priorities.</div>
+          <div class="tab-slider__cards js-tab-slider">
+            {% for pillar in self.get_all_pillars %}
+            {% with pillar=pillar.specific %}
+            {% image pillar.featured_image original as banner %}
+
+            <div class="tab-slider__card {% if pillar %}is-active {%endif%}">
+              <button class="tab-slider__card-label">
+                <div class="tab-slider__card-icon" role="presentation">
+                  <svg>
+                    <use xlink:href="#{{ pillar.slug }}"></use>
+                  </svg>
+                </div>
+                <h1 class="tab-slider__card-headline">{{pillar.title}}</h1>
+                {% if pillar.show_dollars_bar == 'Yes' %}
+                <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{ pillar.percent_to_goal }}% to goal
+                </p>
+                {%endif%}
+                <p class="tab-slider__card-indicator" role="presentation">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </p>
+              </button>
+              <div class="tab-slider__card-content">
+                <div class="tab-slider__card-image-wrap">
+                  <div class="tab-slider__card-image"><img src="{{banner.url}}" alt="Students studying">
+                  </div>
+                </div>
+                <div class="tab-slider__card-rte">
+                  <h2 class="tab-slider__card-subhead">{{pillar.title}}</h2>
+                  <p>{{pillar.summary}}</p>
+                  <ul>
+                    <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
+
+                    <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a></li>
+                    <li><a href="">Give now</a></li>
+                  </ul>
                 </div>
               </div>
-              <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">{{pillar.title}}</h2>
-                <p>{{pillar.summary}}</p>
-                <ul>
-                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
+            </div>
 
-                  <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a></li>
-                  <li><a href="">Give now</a></li>
-                </ul>
-              </div>
+
+            {%endwith%}
+            {%endfor%}
+
+          </div>
+        </div>
+      </section>
+
+      {%endif%}
+
+
+      <!-- Add Ajax and jquery cdn for ajax calls -->
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+      <!-- Perform checkbox checked operations in js -->
+      <!-- save checkbox value to localStorage -->
+      <script>
+        // Avoid scoping issues by encapsulating code inside anonymous function
+        (function () {
+          // variable to store our current state
+          var cbstate;
+
+          // bind to the onload event
+          window.addEventListener('load', function () {
+            // Get the current state from localstorage
+            // State is stored as a JSON string
+            cbstate = JSON.parse(localStorage['CBState'] || '{}');
+
+            // Loop through state array and restore checked
+            // state for matching elements
+            for (var i in cbstate) {
+              var el = document.querySelector('input[name="' + i + '"]');
+              if (el) el.checked = true;
+            }
+
+            // Get all checkboxes that you want to monitor state for
+            var cb = document.getElementsByClassName('filters__checkbox');
+
+            // Loop through results and ...
+            for (var i = 0; i < cb.length; i++) {
+
+              //bind click event handler
+              cb[i].addEventListener('click', function (evt) {
+                // If checkboxe is checked then save to state
+                if (this.checked) {
+                  cbstate[this.name] = true;
+                }
+
+                // Else remove from state
+                else if (cbstate[this.name]) {
+                  delete cbstate[this.name];
+                }
+
+                // Persist state
+                localStorage.CBState = JSON.stringify(cbstate);
+              });
+            }
+          });
+        })();
+      </script>
+
+
+
+
+
+      {% for st in self.get_image_cta %}
+      {% with st=st.specific %}
+      {% image st.mobile_image original as mobile_banner %}
+      {% image st.desktop_image original as desktop_banner %}
+      <section class="component image-cta">
+        <div class="component__background">
+          <picture class="image-cta__picture">
+            <source srcset="{{desktop_banner.url}}" media="(min-width: 768px)"><img src="{{mobile_banner.url}}"
+              alt="People playing chess.">
+          </picture>
+        </div>
+        <div class="component__content">
+          <div class="image-cta__content">
+            <div class="image-cta__content-wrap">
+              <h1 class="image-cta__headline">{{st.image_cta_headline}}</h1>
+              <p class="image-cta__copy">{{st.summary}}</p>
             </div>
           </div>
+        </div>
+      </section>
 
 
+      {%endwith%}
+      {%endfor%}
+
+
+      <section class="component stats">
+        <div class="component__background" role="presentation"></div>
+        <div class="component__content">
+
+          {% for stats in self.get_stats %}
+          {% with stats=stats.specific %}
+          <div class="stats__info">
+            <h1 class="stats__headline">{{stats.stats_headline}}</h1>
+            <p class="stats__copy">{{stats.stats_copy}}</p>
+            {% if stat %}
+            {{stat.stats_cta}}
+            {% endif %}
+          </div>
           {%endwith%}
           {%endfor%}
 
-        </div>
-      </div>
-    </section>
+          <!-- add svg -->
 
-    {%endif%}
+          <div class="stats__stats js-stat-slider">
+            {% for svg in self.get_svgs %}
+            {% with svg=svg.specific %}
+            <div class="stats__stat"><img class="stats__stat-graphic" src="{{svg.svg_image.url}}"
+                alt="A donut chart displaying 50%">
+              <p class="stats__stat-copy">{{svg.title}}</p>
+            </div>
+            {%endwith%}
+            {%endfor%}
 
-
-    <!-- Add Ajax and jquery cdn for ajax calls -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-    <!-- Perform checkbox checked operations in js -->
-    <!-- save checkbox value to localStorage -->
-    <script>
-      // Avoid scoping issues by encapsulating code inside anonymous function
-      (function () {
-        // variable to store our current state
-        var cbstate;
-
-        // bind to the onload event
-        window.addEventListener('load', function () {
-          // Get the current state from localstorage
-          // State is stored as a JSON string
-          cbstate = JSON.parse(localStorage['CBState'] || '{}');
-
-          // Loop through state array and restore checked
-          // state for matching elements
-          for (var i in cbstate) {
-            var el = document.querySelector('input[name="' + i + '"]');
-            if (el) el.checked = true;
-          }
-
-          // Get all checkboxes that you want to monitor state for
-          var cb = document.getElementsByClassName('filters__checkbox');
-
-          // Loop through results and ...
-          for (var i = 0; i < cb.length; i++) {
-
-            //bind click event handler
-            cb[i].addEventListener('click', function (evt) {
-              // If checkboxe is checked then save to state
-              if (this.checked) {
-                cbstate[this.name] = true;
-              }
-
-              // Else remove from state
-              else if (cbstate[this.name]) {
-                delete cbstate[this.name];
-              }
-
-              // Persist state
-              localStorage.CBState = JSON.stringify(cbstate);
-            });
-          }
-        });
-      })();
-    </script>
-
-
-
-
-
-    {% for st in self.get_image_cta %}
-    {% with st=st.specific %}
-    {% image st.mobile_image original as mobile_banner %}
-    {% image st.desktop_image original as desktop_banner %}
-    <section class="component image-cta">
-      <div class="component__background">
-        <picture class="image-cta__picture">
-          <source srcset="{{desktop_banner.url}}" media="(min-width: 768px)"><img src="{{mobile_banner.url}}"
-            alt="People playing chess.">
-        </picture>
-      </div>
-      <div class="component__content">
-        <div class="image-cta__content">
-          <div class="image-cta__content-wrap">
-            <h1 class="image-cta__headline">{{st.image_cta_headline}}</h1>
-            <p class="image-cta__copy">{{st.summary}}</p>
           </div>
+
+
         </div>
-      </div>
-    </section>
+      </section>
+      <!-- add cards cta -->
+
+      <section class="component cards-cta js-trigger">
+        <div class="component__background" role="presentation"></div>
+        <div class="component__content">
+          <h1 class="cards-cta__headline">Stories of Impact</h1>
+
+          <div class="cards-cta__cards js-news-slider">
+
+            <!-- Add first featured page -->
+            {% for fp in fp_info %}
+            {% with fp=fp.specific %}
+            {% image fp.featured_image fill-750x420 as banner %}
+
+            <a class="image-card" href="{% pageurl fp %}">
+              <figure class="image-card__img"><img src="{{ banner.url}}" alt="Alt text">
+              </figure>
+              <div class="image-card__content">
+                <p class="image-card__tags">{{fp.display_tags}}</p>
+                <h1 class="image-card__headline">{{fp.title}}</h1>
+                <p class="image-card__copy">{{fp.summary}}</p>
+                <div class="image-card__cta">Learn More</div>
+              </div>
+            </a>
+            {%endwith%}
+            {%endfor%}
 
 
-    {%endwith%}
-    {%endfor%}
+            <!-- Add second featured page -->
+            {% for fp in fp_info2 %}
+            {% with fp=fp.specific %}
+            {% image fp.featured_image fill-750x420 as banner %}
+
+            <a class="image-card" href="{% pageurl fp %}">
+              <figure class="image-card__img"><img src="{{ banner.url}}" alt="Alt text">
+              </figure>
+              <div class="image-card__content">
+                <p class="image-card__tags">{{fp.display_tags}}</p>
+                <h1 class="image-card__headline">{{fp.title}}</h1>
+                <p class="image-card__copy">{{fp.summary}}</p>
+                <div class="image-card__cta">Learn More</div>
+              </div>
+            </a>
+            {%endwith%}
+            {%endfor%}
 
 
-    <section class="component stats">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
+            <!-- Add Last featured page -->
+            {% for fp in fp_info3 %}
+            {% with fp=fp.specific %}
+            {% image fp.featured_image fill-750x420 as banner %}
 
-        {% for stats in self.get_stats %}
-        {% with stats=stats.specific %}
-        <div class="stats__info">
-          <h1 class="stats__headline">{{stats.stats_headline}}</h1>
-          <p class="stats__copy">{{stats.stats_copy}}</p>
-          {% if stat %}
-          {{stat.stats_cta}}
+            <a class="image-card" href="{% pageurl fp %}">
+              <figure class="image-card__img"><img src="{{banner.url}}" alt="Alt text">
+              </figure>
+              <div class="image-card__content">
+                <p class="image-card__tags">{{fp.display_tags}}</p>
+                <h1 class="image-card__headline">{{fp.title}}</h1>
+                <p class="image-card__copy">{{fp.summary}}</p>
+                <div class="image-card__cta">Learn More</div>
+              </div>
+            </a>
+            {%endwith%}
+            {%endfor%}
+
+          </div>
+          {% if cards %}
+          {{cards.cards_cta}}
           {% endif %}
         </div>
-        {%endwith%}
-        {%endfor%}
+      </section>
 
-        <!-- add svg -->
-
-        <div class="stats__stats js-stat-slider">
-          {% for svg in self.get_svgs %}
-          {% with svg=svg.specific %}
-          <div class="stats__stat"><img class="stats__stat-graphic" src="{{svg.svg_image.url}}"
-              alt="A donut chart displaying 50%">
-            <p class="stats__stat-copy">{{svg.title}}</p>
-          </div>
-          {%endwith%}
-          {%endfor%}
-
+      <section class="component form-cta">
+        <div class="component__background" role="presentation"></div>
+        <div class="component__content">
+          <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
+          <form class="form" action="" id="signup-form">
+            <div class="form__input-wrapper form__input--firstname">
+              <input class="form__input" type="text" name="firstname" placeholder="First Name" required>
+              <label class="form__label" for="firstname">First Name</label>
+            </div>
+            <div class="form__input-wrapper form__input--lastname">
+              <input class="form__input" type="text" name="lastname" placeholder="Last Name" required>
+              <label class="form__label" for="lastname">Last Name</label>
+            </div>
+            <div class="form__input-wrapper form__input--email">
+              <input class="form__input" type="email" name="email" placeholder="Email" required>
+              <label class="form__label" for="email">Email</label>
+            </div>
+            <div class="form__input-wrapper form__input--message">
+              <textarea class="form__input form__input--textarea" name="message"
+                placeholder="What the Student Experience means to me*"></textarea>
+              <div class="form__notice">*optional</div>
+            </div>
+            <button class="form__input--submit" type="submit" form="signup-form">Submit</button>
+          </form>
         </div>
-
-
-      </div>
-    </section>
-    <!-- add cards cta -->
-
-    <section class="component cards-cta js-trigger">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
-        <h1 class="cards-cta__headline">Stories of Impact</h1>
-
-        <div class="cards-cta__cards js-news-slider">
-
-          <!-- Add first featured page -->
-          {% for fp in fp_info %}
-          {% with fp=fp.specific %}
-          {% image fp.featured_image fill-750x420 as banner %}
-
-          <a class="image-card" href="{% pageurl fp %}">
-            <figure class="image-card__img"><img src="{{ banner.url}}" alt="Alt text">
-            </figure>
-            <div class="image-card__content">
-              <p class="image-card__tags">{{fp.display_tags}}</p>
-              <h1 class="image-card__headline">{{fp.title}}</h1>
-              <p class="image-card__copy">{{fp.summary}}</p>
-              <div class="image-card__cta">Learn More</div>
-            </div>
-          </a>
-          {%endwith%}
-          {%endfor%}
-
-
-          <!-- Add second featured page -->
-          {% for fp in fp_info2 %}
-          {% with fp=fp.specific %}
-          {% image fp.featured_image fill-750x420 as banner %}
-
-          <a class="image-card" href="{% pageurl fp %}">
-            <figure class="image-card__img"><img src="{{ banner.url}}" alt="Alt text">
-            </figure>
-            <div class="image-card__content">
-              <p class="image-card__tags">{{fp.display_tags}}</p>
-              <h1 class="image-card__headline">{{fp.title}}</h1>
-              <p class="image-card__copy">{{fp.summary}}</p>
-              <div class="image-card__cta">Learn More</div>
-            </div>
-          </a>
-          {%endwith%}
-          {%endfor%}
-
-
-          <!-- Add Last featured page -->
-          {% for fp in fp_info3 %}
-          {% with fp=fp.specific %}
-          {% image fp.featured_image fill-750x420 as banner %}
-
-          <a class="image-card" href="{% pageurl fp %}">
-            <figure class="image-card__img"><img src="{{banner.url}}" alt="Alt text">
-            </figure>
-            <div class="image-card__content">
-              <p class="image-card__tags">{{fp.display_tags}}</p>
-              <h1 class="image-card__headline">{{fp.title}}</h1>
-              <p class="image-card__copy">{{fp.summary}}</p>
-              <div class="image-card__cta">Learn More</div>
-            </div>
-          </a>
-          {%endwith%}
-          {%endfor%}
-
-        </div>
-        {% if cards %}
-        {{cards.cards_cta}}
-        {% endif %}
-      </div>
-    </section>
-
-    <section class="component form-cta">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
-        <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
-        <form class="form" action="" id="signup-form">
-          <div class="form__input-wrapper form__input--firstname">
-            <input class="form__input" type="text" name="firstname" placeholder="First Name" required>
-            <label class="form__label" for="firstname">First Name</label>
-          </div>
-          <div class="form__input-wrapper form__input--lastname">
-            <input class="form__input" type="text" name="lastname" placeholder="Last Name" required>
-            <label class="form__label" for="lastname">Last Name</label>
-          </div>
-          <div class="form__input-wrapper form__input--email">
-            <input class="form__input" type="email" name="email" placeholder="Email" required>
-            <label class="form__label" for="email">Email</label>
-          </div>
-          <div class="form__input-wrapper form__input--message">
-            <textarea class="form__input form__input--textarea" name="message"
-              placeholder="What the Student Experience means to me*"></textarea>
-            <div class="form__notice">*optional</div>
-          </div>
-          <button class="form__input--submit" type="submit" form="signup-form">Submit</button>
-        </form>
-      </div>
-    </section>
+      </section>
   </main>
   <footer class="component site-footer">
     <div class="component__content">
