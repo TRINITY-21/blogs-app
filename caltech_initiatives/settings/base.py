@@ -30,13 +30,14 @@ INSTALLED_APPS = [
     'home',
     'search',
     'contact',
+    'pillars',
 
     # external apps
     'wagtailsvg',
     'wagtail.contrib.modeladmin',
     'generic_chooser',
 
-    
+
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',

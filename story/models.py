@@ -276,4 +276,3 @@ class FeaturedPage(Page):
       ],
       heading="Choose Story of impact to display",
         )]
-         

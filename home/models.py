@@ -38,9 +38,7 @@ from wagtailsvg.models import Svg
 from wagtailsvg.blocks import SvgChooserBlock
 from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtail.embeds.blocks import EmbedBlock
-
-
-
+from pillars.models import PillarPages
 
 
 
@@ -53,7 +51,7 @@ class HomePage(RoutablePageMixin,Page):
           'home.ProgressHero',
           'home.ImageCTA',
           'home.StatsSVG',
-          'home.PillarsPage',
+          'pillars.Pillars',
           'home.StatsPage',
 ]
 
@@ -116,17 +114,9 @@ class HomePage(RoutablePageMixin,Page):
     return svg
   # get all pillars
   def get_all_pillars(self):
-    pillars = PillarPage.objects.all()
+    pillars = PillarPages.objects.all()
+    print(pillars,'pilla')
     return pillars
-
-
-
-  @route(r"^pillars/(?P<pillar_tag>[-\w]+)/$", name="stories_by_pillars")
-  def stories_by_tag(self, request, pillar_tag, *args, **kwargs):
-    posts = StoryPage.objects.filter(slug=pillar_tag)
-    print(posts)
-
-    return super(PillarPage, self).serve(request)
 
 class CardsCTA(Page):
     subpage_types = [ ]
@@ -324,7 +314,6 @@ class StatsPage(Page):
         ),
     ]
 
-
 # image cta section model
 class ImageCTA(Page):
   subpage_types = [ ]
@@ -395,116 +384,3 @@ class FaqPage(Page):
   StreamFieldPanel("links"),
 
   ]
-
-# Pillars Page
-class PillarsPage(RoutablePageMixin, Page):
-  subpage_types = ['home.PillarPage']
-  parent_page_type = []
-  template = 'home/pillar_page.html'
-
-
-
-# Pillar Page
-class PillarPage(RoutablePageMixin,Page):
-  subpage_types = []
-  parent_page_type = []
-
-  dollars_raised = models.CharField(max_length=100, default=0, null=True, blank=True)
-  percent_to_goal = models.CharField(max_length=100, default=0,  null=True, blank=True)
-  featured_image = models.ForeignKey(
-    "wagtailimages.Image",
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL,
-    related_name="+",
-    )
-
-  teaser_image = models.ForeignKey(
-    "wagtailimages.Image",
-    null=True,
-    blank=True,
-    on_delete=models.SET_NULL,
-    related_name="+",
-    )
-  body = StreamField(BodyBlock(),null=True,blank=True,)
-  summary = models.CharField(
-    max_length=100,
-    null=True,
-    blank=True,
-    help_text='Overwrites the default title',
-  )
-
-  pillar_featured_page1 = models.ForeignKey(StoryPage,
-          related_name='pillar_featured_page1',
-          on_delete=models.SET_NULL,
-          null=True, blank=True)
-
-  pillar_featured_page2 = models.ForeignKey(StoryPage,
-          related_name='pillar_featured_page2',
-          on_delete=models.SET_NULL,
-          null=True, blank=True)
-
-  pillar_featured_page3 = models.ForeignKey(StoryPage,
-          related_name='pillar_featured_page3',
-          on_delete=models.SET_NULL,
-          null=True, blank=True)
-  pillars_cta = StreamField(
-      [
-          ("cta", PillarsCTABlock()),
-      ],
-      null=True,
-      blank=True,
-  )
-
-
-  content_panels =  Page.content_panels + [
-  FieldPanel("dollars_raised"),
-  FieldPanel("percent_to_goal"),
-  ImageChooserPanel("featured_image"),
-  ImageChooserPanel("teaser_image"),
-  FieldPanel("summary"),
-  StreamFieldPanel("body"),
-  MultiFieldPanel(
-      [
-      FieldPanel("pillar_featured_page1"),
-      ],
-      heading="Choose first Story of impact to display on Pillar page ",
-        ),        MultiFieldPanel(
-      [
-      FieldPanel("pillar_featured_page2"),
-      ],
-      heading="Choose second Story of impact to display on Pillar page ",
-        ),        MultiFieldPanel(
-      [
-      FieldPanel("pillar_featured_page3"),
-      ],
-      heading="Choose last Story of impact to display on Pillar page ",
-        ),
-        MultiFieldPanel(
-      [
-      StreamFieldPanel("pillars_cta"),
-      ],
-      heading="Choose Pillar CTA",
-        ),
-
-  ]
-
-  def get_context(self, request, *args, **kwargs):
-    context = super().get_context(request, *args, **kwargs)
-
-    return context
-
-
-
-  def get_latest_pillars(self):
-    pillars = PillarPage.objects.all()
-    print(pillars, 'pillars')
-    return pillars
-
-
-
-  def get_pillar(self):
-    pillars = PillarPage.objects.all()
-    print(pillars,'pillars')
-    return pillars
-

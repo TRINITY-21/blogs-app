@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static%}
-{% load concat_strings %}
+{% load wagtailembeds_tags %}
 
 {% load wagtailcore_tags wagtailimages_tags%}
 {% block body_class %}{{page.title}}{% endblock %}
@@ -80,7 +80,7 @@
     {% if page.get_funds %}
     {% for funds in page.get_funds %}
 
-    <section class="component progress-hero">
+    <section class="component progress-hero progress-hero--video">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
         <div class="progress-hero__content">
@@ -93,6 +93,12 @@
             {{heros.cta_hero}}
             {% endif %}
           </div>
+          <div class="progress-hero__video">
+            <div class="video-container"><iframe width="560" height="315"
+                src="https://www.youtube.com/embed/C0DPdy98e4c" title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe></div>
+          </div>
         </div>
         {% if funds.show_progress_bar == 'Yes'%}
         <div class="progress-cta js-trigger">
@@ -101,15 +107,11 @@
               funded</p>
             <p class="progress-cta__funded-percent">{{funds.percentage}}%</p>
             <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation"></div>
-            <!--
-            {% if heros %}
-              {{heros.progress_cta}}
-            {% endif %} -->
-
-
           </div>
+          {% if heros %}
+          {{heros.progress_cta}}
+          {% endif %}
         </div>
-
         {%endif%}
 
       </div>
@@ -122,6 +124,8 @@
     <section class="component tab-slider">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
+        <div class="tab-slider__headline">What Your Gift Supports</div>
+        <div class="tab-slider__copy" aria-hidden="true">Swipe to see our giving priorities.</div>
         <div class="tab-slider__cards js-tab-slider">
           {% for pillar in self.get_all_pillars %}
           {% with pillar=pillar.specific %}
@@ -131,11 +135,17 @@
             <button class="tab-slider__card-label">
               <div class="tab-slider__card-icon" role="presentation">
                 <svg>
-                  <use xlink:href="#scholarship"></use>
+                  <use xlink:href="#{{ pillar.slug }}"></use>
                 </svg>
               </div>
               <h1 class="tab-slider__card-headline">{{pillar.title}}</h1>
-              <p class="tab-slider__card-stats">$X,XXX raised<br>XX% to goal</p>
+              {% if pillar.show_dollars_bar == 'Yes' %}
+              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{ pillar.percent_to_goal }}% to goal
+              </p>
+              {%endif%}
+              <p class="tab-slider__card-indicator" role="presentation">
+                <span></span><span></span><span></span><span></span><span></span>
+              </p>
             </button>
             <div class="tab-slider__card-content">
               <div class="tab-slider__card-image-wrap">
@@ -143,10 +153,10 @@
                 </div>
               </div>
               <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">{{pillar.title}}:</h2>
+                <h2 class="tab-slider__card-subhead">{{pillar.title}}</h2>
                 <p>{{pillar.summary}}</p>
                 <ul>
-                  <li><a href="{% pageurl pillar %}">More information</a></li>
+                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
 
                   <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a></li>
                   <li><a href="">Give now</a></li>
