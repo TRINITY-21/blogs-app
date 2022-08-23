@@ -66,10 +66,18 @@ class Pillars(RoutablePageMixin, Page):
     print(self.pillar, 'self.pilll')
 
     return self.serve(request)
+  # get form fields
+  def get_contact_form_page(self):
+        form =  ContactUsPage.objects.get(slug='contact-us')
+        return form
 
+  def get_contact_form(self):
+        form = self.get_contact_form_page().get_form()
+        return form
 # Pillar Page
 class PillarPages(RoutablePageMixin,Page):
   template = 'pillars/pillars.html'
+  max_count = 5
 
   subpage_types = []
   parent_page_type = []
@@ -99,20 +107,21 @@ class PillarPages(RoutablePageMixin,Page):
     help_text='Overwrites the default title',
   )
 
-  pillars_featured_page1 = models.ForeignKey(StoryPage,
-          related_name='pillars_featured_page1',
-          on_delete=models.SET_NULL,
-          null=True, blank=True)
+  # pillars_featured_page1 = models.ForeignKey(StoryPage,
+  #         related_name='pillars_featured_page1',
+  #         on_delete=models.SET_NULL,
+  #         null=True, blank=True)
 
-  pillars_featured_page2 = models.ForeignKey(StoryPage,
-          related_name='pillars_featured_page2',
-          on_delete=models.SET_NULL,
-          null=True, blank=True)
+  # pillars_featured_page2 = models.ForeignKey(StoryPage,
+  #         related_name='pillars_featured_page2',
+  #         on_delete=models.SET_NULL,
+  #         null=True, blank=True)
 
-  pillars_featured_page3 = models.ForeignKey(StoryPage,
-          related_name='pillars_featured_page3',
-          on_delete=models.SET_NULL,
-          null=True, blank=True)
+  # pillars_featured_page3 = models.ForeignKey(StoryPage,
+  #         related_name='pillars_featured_page3',
+  #         on_delete=models.SET_NULL,
+  #         null=True, blank=True)
+
   pillars_cta = StreamField(
       [
           ("cta", PillarsCTABlock()),
@@ -139,22 +148,22 @@ class PillarPages(RoutablePageMixin,Page):
   ImageChooserPanel("teaser_image"),
   FieldPanel("summary"),
   StreamFieldPanel("body"),
-  MultiFieldPanel(
-      [
-      FieldPanel("pillars_featured_page1"),
-      ],
-      heading="Choose first Story of impact to display on Pillar page ",
-        ),        MultiFieldPanel(
-      [
-      FieldPanel("pillars_featured_page2"),
-      ],
-      heading="Choose second Story of impact to display on Pillar page ",
-        ),        MultiFieldPanel(
-      [
-      FieldPanel("pillars_featured_page3"),
-      ],
-      heading="Choose last Story of impact to display on Pillar page ",
-        ),
+  # MultiFieldPanel(
+  #     [
+  #     FieldPanel("pillars_featured_page1"),
+  #     ],
+  #     heading="Choose first Story of impact to display on Pillar page ",
+  #       ),        MultiFieldPanel(
+  #     [
+  #     FieldPanel("pillars_featured_page2"),
+  #     ],
+  #     heading="Choose second Story of impact to display on Pillar page ",
+  #       ),        MultiFieldPanel(
+  #     [
+  #     FieldPanel("pillars_featured_page3"),
+  #     ],
+  #     heading="Choose last Story of impact to display on Pillar page ",
+  #       ),
         MultiFieldPanel(
       [
       StreamFieldPanel("pillars_cta"),
@@ -163,14 +172,6 @@ class PillarPages(RoutablePageMixin,Page):
         ),
 
   ]
-
-
-  # def get_context(self, request, *args, **kwargs):
-  #   context = super().get_context(request, *args, **kwargs)
-  #   print('hello')
-  #   return context
-
-
 
 
   @route(r"^/pillar/(?P<pillar_tag>[-\w]+)/$", name="stories_by_pillars")

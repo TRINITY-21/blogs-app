@@ -85,7 +85,7 @@ class CTABlock(blocks.StructBlock):
     button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
 
     class Meta:  # noqa
-        template = "home/cta_block.html"
+        template = "home/includes/cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
 
@@ -100,7 +100,7 @@ class HeroCTABlock(blocks.StructBlock):
     button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
 
     class Meta:  # noqa
-        template = "home/hero_cta_block.html"
+        template = "home/includes/hero_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
 
@@ -111,7 +111,7 @@ class StatsCTABlock(blocks.StructBlock):
     button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
 
     class Meta:  # noqa
-        template = "home/stats_cta_block.html"
+        template = "home/includes/stats_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
 
@@ -122,7 +122,7 @@ class CardsCTABlock(blocks.StructBlock):
     button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
 
     class Meta:  # noqa
-        template = "home/cards_cta_block.html"
+        template = "home/includes/cards_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
 
@@ -133,7 +133,7 @@ class PillarsCTABlock(blocks.StructBlock):
     button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
 
     class Meta:  # noqa
-        template = "home/pillars_cta_block.html"
+        template = "home/includes/pillars_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"
 
@@ -144,6 +144,6 @@ class ProgressCTABlock(blocks.StructBlock):
     button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
 
     class Meta:
-        template = "home/progress_cta_block.html"
+        template = "home/includes/progress_cta_block.html"
         icon = "placeholder"
         label = "Call to Action"

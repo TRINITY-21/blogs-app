@@ -19,7 +19,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CalTech Initiative for Students</title>
-  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 
 </head>
 
@@ -201,51 +201,16 @@
     <!-- Edit richtext fields -->
     {% for block in page.body %}
     <section class="component component--rte rte">
-      {% include_block block %}
+      {% include_block block with block=block only %}
       <a class="button" onclick=clearAll() href="/story-listings">View All Stories</a><a class="button" href="#">Make A
         Gift Now</a>
     </section>
 
     {%endfor%}
 
-     <section class="component form-cta">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
-        <h1 class="form-cta__headline">Let us know what the Caltech Student Experience means to you.</h1>
-
-        {% with page.get_contact_form as form %}
-          {%if page.get_contact_form_page %}
-
-        <form class="form" id="signup-form" action="{% pageurl self.get_contact_form_page %}" method="POST" role="form">
-          {% csrf_token %}
-          {% for field in form.visible_fields %}
-          <div class="form__input-wrapper form__input--{{ field.field.widget.attrs.field_classname }}">
-            {{ field.errors }}
-
-            {% if field.field.widget.input_type %}
-
-            <input type="{{ field.field.widget.input_type }}" class="form__input" name="{{ field.name }}"
-              id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required%}required="required" {% endif %}>
-            <label class="form__label" for="{{ field.label }}" for="{{ field.id_for_label }}">{{ field.label }}</label>
-
-            {% else %}
-
-            <textarea type="{{ field.field.widget.input_type }}" class="form__input form__input--textarea" name="{{ field.name }}"
-              id="{{ field.id_for_label }}" placeholder="{{ field.help_text }}" {% if field.field.required  %}required="required" {% endif %}></textarea>
-            <div class="form__notice">*optional</div>
-
-            {% endif %}
-          </div>
-          {% endfor %}
-
-          <button class="form__input--submit" type="submit" form="signup-form">Submit</button>
-
-        </form>
-        {%endif%}
-        {% endwith %}
-
-      </div>
-    </section>
+    <!-- Add form functionality -->
+<!-- include form  -->
+{% include 'home/includes/form.html' %}
 
   </main>
 </body>

@@ -85,7 +85,7 @@ class HomePage(RoutablePageMixin,Page):
       pass
       context['stat'] = stat
 
-    cards = CardsCTA.objects.all() 
+    cards = CardsCTA.objects.all()
     for card in cards:
       pass
       context['cards'] = card
@@ -117,7 +117,14 @@ class HomePage(RoutablePageMixin,Page):
   def get_all_pillars(self):
     pillars = PillarPages.objects.all()
     return pillars
+  # get form fields
+  def get_contact_form_page(self):
+        form =  ContactUsPage.objects.get(slug='contact-us')
+        return form
 
+  def get_contact_form(self):
+        form = self.get_contact_form_page().get_form()
+        return form
 class CardsCTA(Page):
     subpage_types = [ ]
       # No subpage

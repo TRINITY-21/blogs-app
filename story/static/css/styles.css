@@ -2159,7 +2159,7 @@ button[data-controls=prev]:disabled {
   }
 }
 
-.progress-cta__cta .block-cta {
+.progress-cta__cta {
   transition: all .2s linear;
   font-family: "Ubuntu Mono", monospace;
   font-size: 18px;
@@ -2193,7 +2193,7 @@ button[data-controls=prev]:disabled {
   }
 }
 
-.progress-cta__cta .block-cta::after {
+.progress-cta__cta::after {
   transition: -webkit-transform .2s linear;
   transition: transform .2s linear;
   transition: transform .2s linear, -webkit-transform .2s linear;
