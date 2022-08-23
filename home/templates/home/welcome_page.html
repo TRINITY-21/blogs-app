@@ -16,9 +16,7 @@
   <title>CalTech Initiative for Students</title>
   <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
-<style>
 
-</style>
 
 <body class="page-type-home">
   <div class="icon-sprite" role="presentation">
@@ -156,7 +154,7 @@
           <div class="tab-slider__cards js-tab-slider">
             {% for pillar in self.get_all_pillars %}
             {% with pillar=pillar.specific %}
-            {% image pillar.featured_image original as banner %}
+            {% image pillar.teaser_image fill-580x465 as banner %}
 
             <div class="{% if pillar %} tab-slider__card is-active {%endif%}">
               <button class="tab-slider__card-label">
@@ -176,7 +174,7 @@
               </button>
               <div class="tab-slider__card-content">
                 <div class="tab-slider__card-image-wrap">
-                  <div class="tab-slider__card-image"><img src="{{banner.url}}" alt="Students studying">
+                  <div class="tab-slider__card-image"><img src="{{ banner.url }}" alt="Students studying">
                   </div>
                 </div>
                 <div class="tab-slider__card-rte">
@@ -388,11 +386,11 @@
         </div>
       </section>
 
-          <!-- include form  -->
-          {% include 'home/includes/form.html' %}
-          </main>
-          <!-- include footer -->
-          {% include 'home/includes/footer.html' %}
+      <!-- include form  -->
+      {% include 'home/includes/form.html' %}
+  </main>
+  <!-- include footer -->
+  {% include 'home/includes/footer.html' %}
 
 </html>
 

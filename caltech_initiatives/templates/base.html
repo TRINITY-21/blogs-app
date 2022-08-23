@@ -15,26 +15,26 @@
         {% endblock %}
     </title>
     <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
 
-    {# Global stylesheets #}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <!-- {# Global stylesheets #} -->
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"> -->
 
-    {% block extra_css %}
-    {# Override this in templates to add extra stylesheets #}
-    {% endblock %}
+    <!-- {% block extra_css %} -->
+    <!-- {# Override this in templates to add extra stylesheets #}
+    {% endblock %} -->
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
+<body>
 
     {% block content %}{% endblock %}
-
+<!--
     {# Global javascript #}
     <script type="text/javascript" src="{% static 'js/caltech_initiatives.js' %}"></script>
 
     {% block extra_js %}
     {# Override this in templates to add extra javascript #}
-    {% endblock %}
+    {% endblock %} -->
 </body>
 
 </html>

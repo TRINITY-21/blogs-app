@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static%}
-{% load concat_strings %}
 
 {% load wagtailcore_tags wagtailimages_tags%}
 {% block body_class %}{{page.title}}{% endblock %}
@@ -97,10 +96,10 @@
 
     <!-- add pillars page  -->
     {% if pillars %}
-{% for story in pillars %}
-{% with story=story.specific %}
-{% image story.featured_image fill-750x420 as banner %}
-<section class="component story-hero">
+    {% for story in pillars %}
+    {% with story=story.specific %}
+    {% image story.featured_image fill-750x420 as banner %}
+    <section class="component story-hero">
       <div class="story-hero__wrap">
         <div class="component__background" role="presentation"></div>
         <div class="component__content">
@@ -135,9 +134,9 @@
         <h1 class="cards-cta__headline">{{story.title}} Stories</h1>
         {%endfor%}
         <div class="cards-cta__cards js-news-slider">
-{% for story in pillar_stories %}
-{% with story=story.specific %}
-{% image story.featured_image fill-750x420 as banner %}
+          {% for story in pillar_stories %}
+          {% with story=story.specific %}
+          {% image story.featured_image fill-750x420 as banner %}
           <a class="image-card" href="{% pageurl story %}">
             <figure class="image-card__img"><img src="{{ banner.url }}" alt="Alt text"></figure>
             <div class="image-card__content">
@@ -147,18 +146,18 @@
               <div class="image-card__cta">Learn More</div>
             </div>
           </a>
-{%endwith%}
-{%endfor%}
+          {%endwith%}
+          {%endfor%}
 
         </div><a class="cards-cta__cta" href="/story-listings">View All Stories</a>
       </div>
     </section>
 
-<!-- include form  -->
-{% include 'home/includes/form.html' %}
-</main>
-<!-- include footer -->
-{% include 'home/includes/footer.html' %}
+    <!-- include form  -->
+    {% include 'home/includes/form.html' %}
+  </main>
+  <!-- include footer -->
+  {% include 'home/includes/footer.html' %}
 
 </html>
 
