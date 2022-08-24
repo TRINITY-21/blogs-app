@@ -178,13 +178,14 @@
         <div class="component__content">
           <p class="story-hero__eyebrow">{{self.display_tags}}</p>
           <h1 class="story-hero__title">{{self.title}}</h1>
-          <p class="story-hero__author">{{self.author.firstname}}  {{self.author.lastname}}
+          <p class="story-hero__author">{{self.author.firstname}} {{self.author.lastname}}
             {%if self.co_author%},
             {{self.co_author.firstname}}
             {{self.co_author.lastname}}
-          {%endif%}
-        </p>
-          <p class="story-hero__author"> {{self.author.job_title}} {%if self.co_author%}, {{self.co_author.job_title}}{%endif%}</p>
+            {%endif%}
+          </p>
+          <p class="story-hero__author"> {{self.author.job_title}} {%if self.co_author%},
+            {{self.co_author.job_title}}{%endif%}</p>
         </div>
       </div>
       <!-- add image -->
@@ -198,18 +199,18 @@
     </section>
 
     <!-- Edit richtext fields -->
-    {% for block in page.body %}
+
     <section class="component component--rte rte">
-      {% include_block block with block=block only %}
+      {{ self.body| richtext}}
       <a class="button" onclick=clearAll() href="/story-listings">View All Stories</a><a class="button" href="#">Make A
         Gift Now</a>
     </section>
 
-    {%endfor%}
+
 
     <!-- Add form functionality -->
-<!-- include form  -->
-{% include 'home/includes/form.html' %}
+    <!-- include form  -->
+    {% include 'home/includes/form.html' %}
 
   </main>
 </body>

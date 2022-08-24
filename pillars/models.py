@@ -101,11 +101,7 @@ class PillarPages(RoutablePageMixin,Page):
     related_name="+",
     )
   body = StreamField(BodyBlock(),null=True,blank=True,)
-  summary = models.TextField(
-    null=True,
-    blank=True,
-    help_text='Overwrites the default title',
-  )
+  summary =StreamField(BodyBlock(),null=True,blank=True,)
 
   # pillars_featured_page1 = models.ForeignKey(StoryPage,
   #         related_name='pillars_featured_page1',
@@ -146,24 +142,9 @@ class PillarPages(RoutablePageMixin,Page):
   FieldPanel("show_dollars_bar"),
   ImageChooserPanel("featured_image"),
   ImageChooserPanel("teaser_image"),
-  FieldPanel("summary"),
+  StreamFieldPanel("summary"),
   StreamFieldPanel("body"),
-  # MultiFieldPanel(
-  #     [
-  #     FieldPanel("pillars_featured_page1"),
-  #     ],
-  #     heading="Choose first Story of impact to display on Pillar page ",
-  #       ),        MultiFieldPanel(
-  #     [
-  #     FieldPanel("pillars_featured_page2"),
-  #     ],
-  #     heading="Choose second Story of impact to display on Pillar page ",
-  #       ),        MultiFieldPanel(
-  #     [
-  #     FieldPanel("pillars_featured_page3"),
-  #     ],
-  #     heading="Choose last Story of impact to display on Pillar page ",
-  #       ),
+
         MultiFieldPanel(
       [
       StreamFieldPanel("pillars_cta"),

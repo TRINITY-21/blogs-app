@@ -145,7 +145,7 @@ class StoryPage(Page):
     on_delete=models.SET_NULL,
     related_name="+",
     )
-  body = StreamField(BodyBlock(),null=True,blank=True,)
+  body = RichTextField(null=True,blank=True,)
   # primary_tags = ClusterTaggableManager(through="story.StoryPagePrimaryTag",related_name='primary_tags',blank=True,)
   tags = ClusterTaggableManager(through="story.StoryPageSecondaryTag",blank=True)
   summary = models.CharField(
@@ -202,7 +202,7 @@ class StoryPage(Page):
     ),
 
   ImageChooserPanel("featured_image"),
-  StreamFieldPanel("body"),
+  FieldPanel("body"),
   ]
 
   def get_contact_form_page(self):
