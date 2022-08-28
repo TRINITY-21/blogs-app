@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from getopt import getopt
 from pyexpat import model
-from re import template
+from re import T, template
 import re
 from turtle import home
 from django.db.models.functions import Lower
@@ -12,6 +12,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
+from wagtail.images.blocks import ImageChooserBlock
 from django.http import JsonResponse
 from django.http.response import JsonResponse
 from django.shortcuts import render
@@ -40,6 +41,7 @@ from wagtailsvg.edit_handlers import SvgChooserPanel
 from wagtail.embeds.blocks import EmbedBlock
 from pillars.models import PillarPages
 from django import forms
+from wagtail.core.fields import RichTextField
 
 
 
@@ -355,7 +357,11 @@ class ImageCTA(Page):
     on_delete=models.SET_NULL,
     related_name="m_image",
     )
-  summary = StreamField(BodyBlock(),null=True,blank=True,)
+  summary = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+    ], null=True, blank=True,)
 
 
   content_panels =  Page.content_panels + [
@@ -390,7 +396,8 @@ class FaqPage(Page):
   subpage_types = []
   parent_page_type = []
 
-  body = StreamField(BodyBlock(),null=True,blank=True,)
+  body = RichTextField(null=True,blank=True,features=['strong', 'em','h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+   'ol', 'ul','hr','link','document-link','image','embed'])
   links = StreamField(
         [
             ("cta", CTABlock()),

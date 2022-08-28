@@ -19,7 +19,15 @@
   <link href="{% static '/css/styles.css' %}" rel="stylesheet">
 </head>
 
-</html>
+<style>
+  /* .block-paragraph {
+    font-family: NeueHelvetica55Roman, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+    margin-bottom: 35px;
+  } */
+</style>
+
 
 <body class="page-type-home">
   <div class="icon-sprite" role="presentation">
@@ -91,7 +99,14 @@
         <div class="progress-hero__content">
           <div class="progress-hero__copy">
             <h1 class="progress-hero__headline">{{funds.hero_headline}}</h1>
-            <p class="progress-hero__copy">{{funds.hero_copy}}</p>
+            <div class="progress-hero__copy">
+
+              {% for block in funds.hero_copy %}
+
+              {% include_block block%}
+              {% endfor %}
+            </div>
+
             <!-- add cta to home -->
             {% if heros %}
             {{heros.cta_hero}}
@@ -103,15 +118,17 @@
         {% if funds.show_progress_bar == 'Yes'%}
         <div class="progress-cta js-trigger">
           <div class="progress-cta__progress">
-            <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of {{funds.final_amt}}
+            <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of ${{funds.final_amt}}
               funded
             </p>
             <p class="progress-cta__funded-percent">50%</p>
             <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation"></div>
             <!--add progress cta to mobile -->
-            {% if heros %}
-            {{heros.progress_cta}}
-            {% endif %}
+            <div class="progress-cta__cta"">
+              {% if heros %}
+              {{heros.progress_cta}}
+              {% endif %}
+            </div>
           </div>
         </div>
         {%endif%}
@@ -121,40 +138,47 @@
 
     <!--Use video home page-->
     {% if funds.show_video_image == 'video' %}
-    <section class="component progress-hero progress-hero--video">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
-        <div class="progress-hero__content">
-          <div class="progress-hero__copy">
-            <h1 class="progress-hero__headline">{{funds.hero_headline}}</h1>
-            <p class="progress-hero__copy">{{funds.hero_copy}}</p>
-            <!-- add cta to home -->
-            {% if heros %}
-            {{heros.cta_hero}}
-            {% endif %}
-          </div>
-          <div class="progress-hero__video">
-            <div class="video-container">{% embed funds.video_url %}
-            </div>
-          </div>
-        </div>
-        <!-- Add show progress bar toggle-->
-        {% if funds.show_progress_bar == 'Yes'%}
-        <div class="progress-cta js-trigger">
-          <div class="progress-cta__progress">
-            <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of {{funds.final_amt}}
-              funded
-            </p>
-            <p class="progress-cta__funded-percent">50%</p>
-            <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation"></div>
-            <!--add progress cta to mobile -->
-            {% if heros %}
-            {{heros.progress_cta}}
-            {% endif %}
-          </div>
-        </div>
-        {%endif%}
-      </div>
+    <section class=" component progress-hero progress-hero--video">
+              <div class="component__background" role="presentation"></div>
+              <div class="component__content">
+                <div class="progress-hero__content">
+                  <div class="progress-hero__copy">
+                    <h1 class="progress-hero__headline">{{funds.hero_headline}}</h1>
+                    <div class="progress-hero__copy">
+
+                      {% for block in funds.hero_copy %}
+
+                      {% include_block block%}
+                      {% endfor %}
+                    </div> <!-- add cta to home -->
+                    {% if heros %}
+                    {{heros.cta_hero}}
+                    {% endif %}
+                  </div>
+                  <div class="progress-hero__video">
+                    <div class="video-container">{% embed funds.video_url %}
+                    </div>
+                  </div>
+                </div>
+                <!-- Add show progress bar toggle-->
+                {% if funds.show_progress_bar == 'Yes'%}
+                <div class="progress-cta js-trigger">
+                  <div class="progress-cta__progress">
+                    <p class="progress-cta__funded-dollars"><strong>${{funds.initial_amt}}</strong> of
+                      {{funds.final_amt}}
+                      funded
+                    </p>
+                    <p class="progress-cta__funded-percent">50%</p>
+                    <div class="progress-cta__bar" style="--progress:{{funds.percentage}}%" role="presentation"></div>
+                    <!--add progress cta to mobile -->
+                    <div class="progress-cta__cta"">
+                          {% if heros %}
+                          {{heros.progress_cta}}
+                          {% endif %}
+                  </div>
+                </div>
+                {%endif%}
+              </div>
     </section>
     {%endif%}
     {%endfor%}
@@ -162,53 +186,215 @@
 
 
     <!--Add pillars page-->
-    <section class="component tab-slider">
-      <div class="component__background" role="presentation"></div>
-      <div class="component__content">
-        <div class="tab-slider__headline">What Your Gift Supports</div>
-        <div class="tab-slider__copy" aria-hidden="true">Swipe to see our giving priorities.</div>
-        <div class="tab-slider__cards js-tab-slider">
-          <!--Add tab slider card -->
-          {% for pillar in self.get_all_pillars %}
-          {% with pillar=pillar.specific %}
-          {% image pillar.teaser_image original as banner %}
-          <div class="{% if pillar %} tab-slider__card is-active {%endif%}">
-            <button class="tab-slider__card-label">
-              <div class="tab-slider__card-icon" role="presentation">
-                <svg>
-                  <use xlink:href="#{{pillar.slug}}"></use>
-                </svg>
-              </div>
-              <h1 class="tab-slider__card-headline">{{ pillar.title }} <br></h1>
-              {% if pillar.show_dollars_bar == 'Yes' %}
-              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{ pillar.percent_to_goal }}% to goal
-              </p>
-              {%endif%}
-              <p class="tab-slider__card-indicator" role="presentation">
-                <span></span><span></span><span></span><span></span><span></span>
-              </p>
-            </button>
-            <div class="tab-slider__card-content">
-              <div class="tab-slider__card-image-wrap">
-                <div class="tab-slider__card-image"><img src="{{ banner.url }}" alt="Students studying">
-                </div>
-              </div>
-              <div class="tab-slider__card-rte">
-                <h2 class="tab-slider__card-subhead">{{ pillar.title }}:</h2>
-                <p>{{pillar.summary }}</p>
-                <ul>
-                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
-                  <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a></li>
-                  <li><a href="">Give now</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          {%endwith%}
-          {%endfor%}
-        </div>
-      </div>
+
+        <section class=" component tab-slider">
+                      <div class="component__background" role="presentation"></div>
+                      <div class="component__content">
+                        <div class="tab-slider__headline">What Your Gift Supports</div>
+                        <div class="tab-slider__copy" aria-hidden="true">Swipe to see our giving priorities.</div>
+                        <div class="tab-slider__cards js-tab-slider">
+
+                          <!--Add tab slider card -->
+                          {% for pillar in self.get_all_pillars %}
+                          {% with pillar=pillar.specific %}
+                          {% image pillar.teaser_image original as banner %}
+
+                          {% if pillar.slug == 'scholarship' %}
+                          <div class="tab-slider__card is-active">
+                            <button class="tab-slider__card-label">
+                              <div class="tab-slider__card-icon" role="presentation">
+                                <svg>
+                                  <use xlink:href="#scholarship"></use>
+                                </svg>
+                              </div>
+                              <h1 class="tab-slider__card-headline">Undergraduate <br>Scholarships</h1>
+                              {% if pillar.show_dollars_bar == 'Yes' %}
+                              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{pillar.percent_to_goal}}% to goal
+                              </p>
+                              {%endif%} <p class="tab-slider__card-indicator" role="presentation">
+                                <span></span><span></span><span></span><span></span><span></span>
+                              </p>
+                            </button>
+                            <div class="tab-slider__card-content">
+                              <div class="tab-slider__card-image-wrap">
+                                <div class="tab-slider__card-image"><img src="{{ banner.url }}" alt="Students studying">
+                                </div>
+                              </div>
+                              <div class="tab-slider__card-rte">
+                                <h2 class="tab-slider__card-subhead">Undergrad Scholarships:</h2>
+                                {% for block in pillar.summary %}
+                                <p>{% include_block block %}</p>
+                                {% endfor %}
+                                <ul>
+                                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
+                                  <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a>
+                                  </li>
+                                  <li><a href="">Give now</a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+
+                          {%endif%}
+
+                          {% if pillar.slug == 'fellowships' %}
+                          <div class="tab-slider__card">
+                            <button class="tab-slider__card-label">
+                              <div class="tab-slider__card-icon" role="presentation">
+                                <svg>
+                                  <use xlink:href="#fellowships"></use>
+                                </svg>
+                              </div>
+                              <h1 class="tab-slider__card-headline">Graduate <br>Fellowships</h1>
+                              {% if pillar.show_dollars_bar == 'Yes' %}
+                              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{pillar.percent_to_goal}}% to goal
+                              </p>
+                              {%endif%} <p class="tab-slider__card-indicator" role="presentation">
+                                <span></span><span></span><span></span><span></span><span></span>
+                              </p>
+                            </button>
+                            <div class="tab-slider__card-content">
+                              <div class="tab-slider__card-image-wrap">
+                                <div class="tab-slider__card-image"><img src="{{ banner.url }}" alt="Students studying">
+                                </div>
+                              </div>
+                              <div class="tab-slider__card-rte">
+                                <h2 class="tab-slider__card-subhead">Graduate Fellowships:</h2>
+                                {% for block in pillar.summary %}
+                                <p>{% include_block block %}</p>
+                                {% endfor %}
+                                <ul>
+                                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
+                                  <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a>
+                                  </li>
+                                  <li><a href="">Give now</a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          {%endif%}
+
+                          {% if pillar.slug == 'health' %}
+                          <div class="tab-slider__card">
+                            <button class="tab-slider__card-label">
+                              <div class="tab-slider__card-icon" role="presentation">
+                                <svg>
+                                  <use xlink:href="#health"></use>
+                                </svg>
+                              </div>
+                              <h1 class="tab-slider__card-headline">Health & <br>Wellness</h1>
+                              {% if pillar.show_dollars_bar == 'Yes' %}
+                              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{pillar.percent_to_goal}}% to goal
+                              </p>
+                              {%endif%} <p class="tab-slider__card-indicator" role="presentation">
+                                <span></span><span></span><span></span><span></span><span></span>
+                              </p>
+                            </button>
+                            <div class="tab-slider__card-content">
+                              <div class="tab-slider__card-image-wrap">
+                                <div class="tab-slider__card-image"><img src="{{ banner.url }}" alt="Students studying">
+                                </div>
+                              </div>
+                              <div class="tab-slider__card-rte">
+                                <h2 class="tab-slider__card-subhead">Health & Wellness:</h2>
+                                {% for block in pillar.summary %}
+                                <p>{% include_block block %}</p>
+                                {% endfor %}
+                                <ul>
+                                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
+                                  <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a>
+                                  </li>
+                                  <li><a href="">Give now</a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          {%endif%}
+
+                          {% if pillar.slug == 'career' %}
+                          <div class="tab-slider__card">
+                            <button class="tab-slider__card-label">
+                              <div class="tab-slider__card-icon" role="presentation">
+                                <svg>
+                                  <use xlink:href="#career"></use>
+                                </svg>
+                              </div>
+                              <h1 class="tab-slider__card-headline">Career <br>Advising</h1>
+                              {% if pillar.show_dollars_bar == 'Yes' %}
+                              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{pillar.percent_to_goal}}% to goal
+                              </p>
+                              {%endif%} <p class="tab-slider__card-indicator" role="presentation">
+                                <span></span><span></span><span></span><span></span><span></span>
+                              </p>
+                            </button>
+                            <div class="tab-slider__card-content">
+                              <div class="tab-slider__card-image-wrap">
+                                <div class="tab-slider__card-image"><img src="{{ banner.url }}" alt="Students studying">
+                                </div>
+                              </div>
+                              <div class="tab-slider__card-rte">
+                                <h2 class="tab-slider__card-subhead">Career Advising:</h2>
+                                {% for block in pillar.summary %}
+                                <p>{% include_block block %}</p>
+                                {% endfor %}
+                                <ul>
+                                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
+                                  <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a>
+                                  </li>
+                                  <li><a href="">Give now</a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          {%endif%}
+
+                          {% if pillar.slug == 'cocurricular' %}
+                          <div class="tab-slider__card">
+                            <button class="tab-slider__card-label">
+                              <div class="tab-slider__card-icon" role="presentation">
+                                <svg>
+                                  <use xlink:href="#cocurricular"></use>
+                                </svg>
+                              </div>
+                              <h1 class="tab-slider__card-headline">Co&#8209;Curricular <br>Experience</h1>
+                              {% if pillar.show_dollars_bar == 'Yes' %}
+                              <p class="tab-slider__card-stats">${{ pillar.dollars_raised }}<br>{{pillar.percent_to_goal}}% to goal
+                              </p>
+                              {%endif%} <p class="tab-slider__card-indicator" role="presentation">
+                                <span></span><span></span><span></span><span></span><span></span>
+                              </p>
+                            </button>
+                            <div class="tab-slider__card-content">
+                              <div class="tab-slider__card-image-wrap">
+                                <div class="tab-slider__card-image"><img src="{{ banner.url }}" alt="Students studying">
+                                </div>
+                              </div>
+                              <div class="tab-slider__card-rte">
+                                <h2 class="tab-slider__card-subhead">Co-Curricular Experience:</h2>
+                                {% for block in pillar.summary %}
+                                <p>{% include_block block %}</p>
+                                {% endfor %}
+                                <ul>
+                                  <li><a href="/pillars/pillar/{{ pillar.slug }}">More information</a></li>
+                                  <li><a href="/story-listings/?tags={{pillar.slug}}">Stories about {{pillar.title}}</a>
+                                  </li>
+                                  <li><a href="">Give now</a></li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          {%endif%}
+
+
+                          {%endwith%}
+                          {%endfor%}
+
+                        </div>
+                      </div>
+                    </div>
     </section>
+
+
 
     <!-- Add Ajax and jquery cdn for ajax calls -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -277,7 +463,12 @@
         <div class="image-cta__content">
           <div class="image-cta__content-wrap">
             <h1 class="image-cta__headline">{{st.image_cta_headline}}</h1>
-            <p class="image-cta__copy">{{st.summary}}</p>
+            <div class="image-cta__copy">
+              {% for block in st.summary %}
+              {% include_block block %}
+              {% endfor %}
+            </div>
+
           </div>
         </div>
       </div>
@@ -295,7 +486,12 @@
         {% with stats=stats.specific %}
         <div class="stats__info">
           <h1 class="stats__headline">{{stats.stats_headline}}</h1>
-          <p class="stats__copy">{{stats.stats_copy}}</p>
+          <div class="stats__copy">
+            {% for block in stats.stats_copy %}
+            {% include_block block %}
+            {% endfor %}
+          </div>
+
           {% if stat %}
           {{stat.stats_cta}}
           {% endif %}
@@ -322,7 +518,8 @@
     <section class="component cards-cta js-trigger">
       <div class="component__background" role="presentation"></div>
       <div class="component__content">
-        <h1 class="cards-cta__headline"></h1>
+        <h1 class="cards-cta__headline">Stories of Impact
+        </h1>
         <div class="cards-cta__cards js-news-slider">
           <!-- Add first featured page -->
           {% for fp in fp_info %}
@@ -333,7 +530,10 @@
             <div class="image-card__content">
               <p class="image-card__tags">{{fp.display_tags}}</p>
               <h1 class="image-card__headline">{{fp.title}}</h1>
-              <p class="image-card__copy">{{fp.summary}}</p>
+              <div class="image-card__copy">
+                <p>{{fp.summary}}</p>
+              </div>
+
               <div class="image-card__cta">Learn More</div>
             </div>
           </a>
@@ -349,7 +549,9 @@
             <div class="image-card__content">
               <p class="image-card__tags">{{fp.display_tags}}</p>
               <h1 class="image-card__headline">{{fp.title}}</h1>
-              <p class="image-card__copy">{{fp.summary}}</p>
+              <div class="image-card__copy">
+                <p>{{fp.summary}}</p>
+              </div>
               <div class="image-card__cta">Learn More</div>
             </div>
           </a>
@@ -365,7 +567,9 @@
             <div class="image-card__content">
               <p class="image-card__tags">{{fp.display_tags}}</p>
               <h1 class="image-card__headline">{{fp.title}}</h1>
-              <p class="image-card__copy">{{fp.summary}}</p>
+              <div class="image-card__copy">
+                <p>{{fp.summary}}</p>
+              </div>
               <div class="image-card__cta">Learn More</div>
             </div>
           </a>

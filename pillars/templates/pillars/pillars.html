@@ -142,7 +142,11 @@
             <div class="image-card__content">
               <p class="image-card__tags"></p>
               <h1 class="image-card__headline">{{ story.title }}</h1>
-              <p class="image-card__copy">{{story.summary}}</p>
+              <div class="image-card__copy">
+                {% for block in story.summary %}
+                {% include_block block %}
+                {% endfor %}
+              </div>
               <div class="image-card__cta">Learn More</div>
             </div>
           </a>

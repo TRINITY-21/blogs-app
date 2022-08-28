@@ -69,12 +69,6 @@ class BodyBlock(StreamBlock):
 	thumbnail_gallery = ListBlock(CustomImageChooserBlock())
 
 
-# streams/blocks.py
-"""Streamfields live in here."""
-
-from wagtail.core import blocks
-
-
 class CTABlock(blocks.StructBlock):
     """A simple call to action section."""
 

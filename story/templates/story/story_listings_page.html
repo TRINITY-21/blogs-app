@@ -127,7 +127,16 @@
         <div class="image-hero__content">
           <p class="image-hero__eyebrow">{{fp.display_tags}}</p>
           <h1 class="image-hero__headline">{{fp.title}}</h1>
-          <p class="image-hero__copy">{{fp.summary}}</p><a class="image-hero__cta" href="{% pageurl fp %}">Learn
+          <div class="image-hero__copy">
+            {{fp.summary}}
+          </div>
+          <!-- <p class="image-hero__copy">
+            {{fp.summary}}
+          </p> -->
+
+
+
+          <a class="image-hero__cta" href="{% pageurl fp %}">Learn
             More</a>
         </div><img class="image-hero__image" src="{{banner.url}}" alt="Smiling students">
       </div>
@@ -145,7 +154,7 @@
           {% for tags in page.get_tags %}
           <div class="filters__filter" onclick=checked()>
             <label class="filters__label">
-              <input class="filters__checkbox" type="checkbox"  name="{{tags.slug}}" value={{tags.slug}}>{{tags.name}}
+              <input class="filters__checkbox" type="checkbox" name="{{tags.slug}}" value={{tags.slug}}>{{tags.name}}
             </label>
           </div>
           {% endfor %}
@@ -265,26 +274,26 @@
     </div>
 
 
-        <script>
-                 $(document).ready( function () {
-                      // Get the current state from localstorage
-                      // State is stored as a JSON string
-                      // cbstate = JSON.parse(localStorage['CBState'] || '{}');
-                  cbstate = JSON.parse(localStorage['CBState'] || '{}');
+    <script>
+      $(document).ready(function () {
+        // Get the current state from localstorage
+        // State is stored as a JSON string
+        // cbstate = JSON.parse(localStorage['CBState'] || '{}');
+        cbstate = JSON.parse(localStorage['CBState'] || '{}');
 
-                  let location = window.location.href;
-                  let tags = location.slice(43)
-                  // alert(tag)
-                  // let tag = JSON.parse(tags)
-                   cbstate[tags] = true;
-                   localStorage.CBState = JSON.stringify(cbstate);
+        let location = window.location.href;
+        let tags = location.slice(43)
+        // alert(tag)
+        // let tag = JSON.parse(tags)
+        cbstate[tags] = true;
+        localStorage.CBState = JSON.stringify(cbstate);
 
-                  // let CBState = { tags: true };
-                  // Put the object into storage
-                  // localStorage.setItem('CBState', JSON.stringify(CBState));
-                  })
+        // let CBState = { tags: true };
+        // Put the object into storage
+        // localStorage.setItem('CBState', JSON.stringify(CBState));
+      })
 
-        </script>
+    </script>
 
     <section class="component teaser-list">
       <div class="component__background" role="presentation"></div>
@@ -299,7 +308,10 @@
           <div class="teaser__content">
             <p class="teaser__tags">{{story.display_tags}}</p>
             <h1 class="teaser__headline">{{story.title}}</h1>
-            <p class="teaser__copy">{{story.summary}}</p>
+            <div class="teaser__copy">
+                {% for block in story.summary %}
+                {% include_block block %}
+                {% endfor %}            </div>
             <div class="teaser__cta">Learn More</div>
           </div>
           {%endwith%}
@@ -396,11 +408,11 @@
     {%endif%}
 
     <!-- Add form functionality -->
-<!-- include form  -->
-{% include 'home/includes/form.html' %}
-</main>
-<!-- include footer -->
-{% include 'home/includes/footer.html' %}
+    <!-- include form  -->
+    {% include 'home/includes/form.html' %}
+  </main>
+  <!-- include footer -->
+  {% include 'home/includes/footer.html' %}
 
 </html>
 

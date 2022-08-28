@@ -18,6 +18,7 @@ from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
+from wagtail.images.blocks import ImageChooserBlock
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (
     FieldPanel,
@@ -135,7 +136,7 @@ class StoryListingsPage(RoutablePageMixin, Page):
 # Story Page Model.
 class StoryPage(Page):
   template = "story/story_page.html"
-  subpage_types = [ ]
+  subpage_types = []
       # No subpage
   parent_page_type = []
   featured_image = models.ForeignKey(
@@ -145,15 +146,17 @@ class StoryPage(Page):
     on_delete=models.SET_NULL,
     related_name="+",
     )
-  body = RichTextField(null=True,blank=True,)
+
+  body = RichTextField(null=True,blank=True,features=['strong', 'em','h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+   'ol', 'ul','hr','link','document-link','image','embed'])
   # primary_tags = ClusterTaggableManager(through="story.StoryPagePrimaryTag",related_name='primary_tags',blank=True,)
   tags = ClusterTaggableManager(through="story.StoryPageSecondaryTag",blank=True)
-  summary = models.CharField(
-    max_length=100,
-    null=True,
-    blank=True,
-    help_text='Overwrites the default title',
-  )
+  summary = StreamField([
+        ('heading', blocks.CharBlock(form_classname="full title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+    ], null=True, blank=True,)
+
   author = models.ForeignKey(
     "story.Author",
     on_delete=models.SET_NULL,
@@ -185,7 +188,7 @@ class StoryPage(Page):
   )
 
   content_panels =  Page.content_panels + [
-  FieldPanel("summary"),
+  StreamFieldPanel("summary"),
   SnippetChooserPanel("author"),
   SnippetChooserPanel("co_author"),
   MultiFieldPanel(

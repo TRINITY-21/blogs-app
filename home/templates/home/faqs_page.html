@@ -18,7 +18,11 @@
   <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
 
-</html>
+<style>
+  strong {
+    font-weight: bold;
+  }
+</style>
 
 <body class="page-type-listing-page">
   <div class="icon-sprite" role="presentation">
@@ -129,11 +133,10 @@
           <div class="accordion__panel" id="{{faq.title}}" role="region" aria-labelledby="{{faq.slug}}">
             <!-- add faq body from richtext -->
             <div class="accordion__contents rte">
-            <p>
-              {% for block in faq.body %}
-              {% include_block block %}
-              {%endfor%}
-            </p>
+
+              {{ faq.body|richtext}}
+
+
             </div>
 
             <!-- add cta to faq -->
@@ -148,11 +151,11 @@
     {%endfor%}
 
 
-          <!-- include form  -->
-         {% include 'home/includes/form.html' %}
+    <!-- include form  -->
+    {% include 'home/includes/form.html' %}
   </main>
-          <!-- include footer -->
-          {% include 'home/includes/footer.html' %}
+  <!-- include footer -->
+  {% include 'home/includes/footer.html' %}
 
 
-{%endblock%}
+  {%endblock%}

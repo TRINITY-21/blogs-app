@@ -139,7 +139,12 @@ class PillarPages(RoutablePageMixin,Page):
   content_panels =  Page.content_panels + [
   FieldPanel("dollars_raised"),
   FieldPanel("percent_to_goal"),
-  FieldPanel("show_dollars_bar"),
+        MultiFieldPanel(
+      [
+      StreamFieldPanel("show_dollars_bar"),
+      ],
+      heading="Show Amount To Percentage Raised Bar",
+        ),
   ImageChooserPanel("featured_image"),
   ImageChooserPanel("teaser_image"),
   StreamFieldPanel("summary"),

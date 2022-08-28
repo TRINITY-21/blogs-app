@@ -84,6 +84,10 @@
       grid-area: message
     }
   }
+
+  strong {
+    font-weight: bold;
+  }
 </style>
 
 <body class="page-type-story-page">
@@ -201,7 +205,7 @@
     <!-- Edit richtext fields -->
 
     <section class="component component--rte rte">
-      {{ self.body| richtext}}
+      {{ self.body|richtext}}
       <a class="button" onclick=clearAll() href="/story-listings">View All Stories</a><a class="button" href="#">Make A
         Gift Now</a>
     </section>

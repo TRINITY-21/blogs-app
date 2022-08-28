@@ -328,6 +328,8 @@ textarea {
   padding: 0
 }
 
+
+
 @font-face {
   font-family: NeueHelvetica95Black;
   src: url(/fonts/NeueHelvetica95Black/font.woff2) format("woff2"), url(/fonts/NeueHelvetica95Black/font.woff) format("woff")
@@ -2140,6 +2142,7 @@ button[data-controls=prev]:disabled {
     transition: none
   }
 }
+
 
 @media screen and (min-width:768px) {
   .progress-cta__bar {
